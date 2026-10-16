@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PartyFun — Игры для компании онлайн и на одном устройстве | Гартик Фон, Слова-мины, Шпион</title>
+  <meta name="description" content="Лучшие игры для вечеринок от 3 игроков: Гартик Фон (Испорченный телефон), Слова-мины, Пришелец среди нас, На одной волне, Ха-Ха Батл и другие!">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Unbounded', 'sans-serif'],
+          },
+          animation: {
+            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 4s ease-in-out infinite',
+            'shake': 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-6px)' },
+            },
+            shake: {
+              '10%, 90%': { transform: 'translate3d(-2px, 0, 0)' },
+              '20%, 80%': { transform: 'translate3d(4px, 0, 0)' },
+              '30%, 50%, 70%': { transform: 'translate3d(-6px, 0, 0)' },
+              '40%, 60%': { transform: 'translate3d(6px, 0, 0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-dark: #0d0b18;
+      --card-glass: rgba(255, 255, 255, 0.06);
+      --border-glass: rgba(255, 255, 255, 0.12);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(168, 85, 247, 0.22) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(236, 72, 153, 0.18) 0px, transparent 50%),
+        radial-gradient(at 50% 90%, rgba(59, 130, 246, 0.18) 0px, transparent 55%);
+      background-attachment: fixed;
+      color: #f8fafc;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass-card {
+      background: rgba(24, 21, 44, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+    }
+
+    .glass-card-hover {
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card-hover:hover {
+      transform: translateY(-5px) scale(1.01);
+      border-color: rgba(236, 72, 153, 0.45);
+      box-shadow: 0 20px 40px -12px rgba(168, 85, 247, 0.35);
+    }
+
+    .neon-btn {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 55%, #f43f5e 100%);
+      box-shadow: 0 8px 24px -6px rgba(236, 72, 153, 0.65);
+      transition: all 0.2s ease;
+    }
+    .neon-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -4px rgba(236, 72, 153, 0.8);
+    }
+    .neon-btn:active {
+      transform: translateY(0px) scale(0.98);
+    }
+
+    .badge-hit {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: #1a0b05;
+      font-weight: 800;
+    }
+    .badge-new {
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+      color: #041b2d;
+      font-weight: 800;
+    }
+    .badge-gartic {
+      background: linear-gradient(135deg, #facc15, #f97316);
+      color: #1f1200;
+      font-weight: 800;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 12, 29, 0.8);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.45);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(236, 72, 153, 0.7);
+    }
+
+    /* Drawing Canvas Cursor & Touch Lock */
+    #gartic-canvas {
+      touch-action: none;
+      cursor: crosshair;
+      background-color: #ffffff;
+    }
+
+    /* Spectrum Bar */
+    .spectrum-gradient {
+      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-pink-500 selection:text-white">
+
+  <!-- Confetti Canvas Overlay -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none"></div>
+
+  <!-- TOP HEADER (Salofun-inspired + Modern Neon) -->
+  <header class="sticky top-0 z-40 glass-card border-b border-white/10 backdrop-blur-xl">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Logo -->
+      <a href="#lobby" onclick="App.returnToLobby(); return false;" class="flex items-center gap-2.5 group">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-pink-500 to-amber-400 flex items-center justify-center shadow-lg shadow-pink-500/30 group-hover:rotate-6 transition-transform">
+          <i class="fa-solid fa-gamepad text-white text-lg"></i>
+        </div>
+        <div>
+          <div class="font-display font-extrabold text-xl tracking-tight flex items-center">
+            <span class="bg-gradient-to-r from-white via-purple-200 to-pink-300 bg-clip-text text-transparent">partyfun</span>
+            <span class="text-pink-500">.</span>
+            <span class="text-amber-400">ru</span>
+          </div>
+          <p class="text-[11px] text-slate-400 -mt-1 hidden sm:block">Игры для компании 3+ человек</p>
+        </div>
+      </a>
+
+      <!-- Room Pill & Tariff Badge -->
+      <div class="flex items-center gap-2">
+        <button onclick="App.copyRoomCode()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs sm:text-sm transition" title="Скопировать код комнаты">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-300">Комната:</span>
+          <strong id="room-code-display" class="font-mono text-white tracking-wider">428-355</strong>
+          <i class="fa-regular fa-copy text-slate-400 text-xs"></i>
+        </button>
+
+        <button onclick="App.openVipModal()" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400/20 to-pink-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold hover:brightness-110 transition">
+          <i class="fa-solid fa-crown text-amber-400"></i>
+          <span>ВСЕ ИГРЫ ОТКРЫТЫ</span>
+        </button>
+      </div>
+
+      <!-- Right Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button onclick="App.toggleSound()" id="sound-toggle-btn" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-slate-200 transition" title="Звуковые эффекты">
+          <i class="fa-solid fa-volume-high" id="sound-icon"></i>
+        </button>
+        <button onclick="App.openRulesModal()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-slate-200 transition" title="Как играть">
+          <i class="fa-solid fa-book-open"></i>
+        </button>
+        <button onclick="App.openHistoryModal()" class="relative w-10 h-10 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-slate-200 transition" title="История встречи">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span id="history-count-badge" class="absolute -top-1 -right-1 px-1.5 py-0.2 bg-pink-500 text-[10px] font-bold rounded-full text-white">1</span>
+        </button>
+        <button onclick="App.openGithubModal()" class="px-3 h-10 rounded-xl bg-gradient-to-r from-purple-600/40 to-pink-600/40 hover:from-purple-600/60 hover:to-pink-600/60 border border-purple-400/30 flex items-center gap-2 text-xs font-semibold text-white transition" title="Как выложить на GitHub или скачать">
+          <i class="fa-brands fa-github text-base"></i>
+          <span class="hidden sm:inline">GitHub / Скачать</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+
+    <!-- ================= LOBBY VIEW ================= -->
+    <div id="lobby-view" class="space-y-7">
+
+      <!-- Top Banner: Team Space & History Bar (Like Salofun) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Room Status Banner -->
+        <div class="lg:col-span-2 glass-card rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="space-y-1 z-10">
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 text-xs font-medium">
+              <i class="fa-solid fa-sparkles text-amber-400"></i>
+              <span>Комната команды «Наши встречи»</span>
+            </div>
+            <h1 class="font-display font-bold text-xl sm:text-2xl text-white">Вечеринка в разгаре! Выбирайте игру 🎉</h1>
+            <p class="text-xs sm:text-sm text-slate-300">Поддерживается игра на одном экране (По кругу), через демонстрацию экрана в Discord/Zoom/Телеграм или в соседних вкладках.</p>
+          </div>
+          <div class="flex sm:flex-col gap-2 w-full sm:w-auto z-10 shrink-0">
+            <button onclick="App.pickRandomGame()" class="neon-btn px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm text-white flex items-center justify-center gap-2 w-full">
+              <i class="fa-solid fa-dice text-base"></i>
+              <span>Случайная игра</span>
+            </button>
+            <button onclick="App.resetScores()" class="px-4 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 flex items-center justify-center gap-1.5 transition">
+              <i class="fa-solid fa-rotate-right"></i>
+              <span>Сбросить очки</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Meeting History Entry Card -->
+        <button onclick="App.openHistoryModal()" class="glass-card glass-card-hover rounded-3xl p-5 text-left flex items-center justify-between gap-4 group">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 text-xl shrink-0">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <strong class="font-display text-sm sm:text-base text-white">История встречи</strong>
+                <span id="history-pill-count" class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30">1 игра</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Сохраняет результаты, цепочки Гартик Фон и мемы вашей компании</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-right text-slate-400 group-hover:translate-x-1 group-hover:text-white transition"></i>
+        </button>
+      </div>
+
+      <!-- PLAYERS SECTION (3+ Players Management with Avatars & Scores) -->
+      <section class="glass-card rounded-3xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <h2 class="font-display font-bold text-lg sm:text-xl text-white flex items-center gap-2">
+              <i class="fa-solid fa-users text-purple-400"></i>
+              <span>Участники</span>
+              <span id="players-count-label" class="text-pink-400">(4)</span>
+            </h2>
+            <span id="min-players-badge" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              ✓ Идеально для 3+ игроков
+            </span>
+          </div>
+
+          <!-- Add Player Form -->
+          <form onsubmit="App.addPlayer(event)" class="flex items-center gap-2 w-full sm:w-auto">
+            <button type="button" onclick="App.cycleNewAvatar()" id="new-player-avatar-btn" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 flex items-center justify-center text-xl shrink-0 transition" title="Сменить аватарку">
+              🦊
+            </button>
+            <input id="new-player-input" type="text" maxlength="16" placeholder="Имя друга..." class="flex-1 sm:w-44 px-3.5 py-2 rounded-xl bg-black/40 border border-white/15 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-pink-500">
+            <button type="submit" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm flex items-center gap-1.5 shrink-0 transition">
+              <i class="fa-solid fa-plus"></i>
+              <span>Добавить</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Players Horizontal / Grid List -->
+        <div id="players-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- CATEGORY FILTERS & SEARCH -->
+      <section class="space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar" id="category-tabs">
+            <button onclick="App.setCategory('all')" data-cat="all" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/25">
+              🔥 Все игры (12)
+            </button>
+            <button onclick="App.setCategory('hit')" data-cat="hit" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10">
+              👑 Хиты вечеринок
+            </button>
+            <button onclick="App.setCategory('draw')" data-cat="draw" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10">
+              🎨 Рисование и Гартик
+            </button>
+            <button onclick="App.setCategory('words')" data-cat="words" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10">
+              💬 Слова и ассоциации
+            </button>
+            <button onclick="App.setCategory('bluff')" data-cat="bluff" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10">
+              🕵️ Блеф и дедукция
+            </button>
+            <button onclick="App.setCategory('humor')" data-cat="humor" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10">
+              😂 Юмор и мемы
+            </button>
+          </div>
+
+          <!-- Search Input -->
+          <div class="relative w-full md:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input id="game-search-input" oninput="App.filterGames()" type="text" placeholder="Найти игру (напр. Гартик)..." class="w-full pl-9 pr-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-pink-500">
+          </div>
+        </div>
+
+        <!-- GAMES CATALOG GRID -->
+        <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ================= ACTIVE GAME VIEW ================= -->
+    <div id="game-view" class="hidden space-y-5">
+      <!-- Game Top Navigation Bar -->
+      <div class="glass-card rounded-2xl p-3.5 sm:px-5 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <button onclick="App.returnToLobby()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs sm:text-sm font-semibold text-white flex items-center gap-2 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>В комнату</span>
+          </button>
+          <div class="flex items-center gap-2.5">
+            <span id="active-game-icon" class="text-2xl">🎨</span>
+            <div>
+              <h2 id="active-game-title" class="font-display font-bold text-sm sm:text-lg text-white leading-tight">Гартик Фон</h2>
+              <p id="active-game-subtitle" class="text-[11px] text-slate-400">Цепочка рисунков и безумных догадок</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div id="active-game-round-pill" class="px-3 py-1.5 rounded-xl bg-purple-500/20 border border-purple-400/30 text-purple-200 text-xs font-bold">
+            Раунд 1
+          </div>
+          <button onclick="App.restartCurrentGame()" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-xs text-slate-300 flex items-center gap-1.5 transition" title="Начать заново">
+            <i class="fa-solid fa-rotate"></i>
+            <span class="hidden sm:inline">Заново</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Game Stage Container -->
+      <div id="game-stage" class="glass-card rounded-3xl p-5 sm:p-8 min-h-[460px] flex flex-col justify-between relative overflow-hidden">
+        <!-- Game Engine Renders Here -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="max-w-6xl w-full mx-auto px-4 py-6 border-t border-white/10 mt-10 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div class="flex items-center gap-2">
+      <span class="font-display font-bold text-white">partyfun.ru</span>
+      <span>— Сборник лучших игр для вечеринок (3+ игроков). Готово для GitHub Pages.</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <button onclick="App.openRulesModal()" class="hover:text-white transition">Правила игр</button>
+      <button onclick="App.openHistoryModal()" class="hover:text-white transition">История встречи</button>
+      <button onclick="App.openGithubModal()" class="text-pink-400 hover:text-pink-300 font-semibold transition">Скачать index.html</button>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+  <!-- Generic Modal Backdrop -->
+  <div id="modal-backdrop" onclick="App.closeModal(event)" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div id="modal-content" onclick="event.stopPropagation()" class="glass-card rounded-3xl max-w-2xl w-full max-h-[88vh] overflow-y-auto p-6 space-y-5 border border-white/20 animate-float" style="animation: none;">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- ================= APPLICATION JAVASCRIPT ================= -->
+  <script>
+    /**************************************************************
+     * SOUND ENGINE (Web Audio API Synthesizer - Zero external files)
+     **************************************************************/
+    const Sound = {
+      enabled: true,
+      ctx: null,
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+
+      play(type) {
+        if (!this.enabled) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+
+          if (type === 'click') {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.exponentialRampToValueAtTime(240, now + 0.06);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.06);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.06);
+          } else if (type === 'tick') {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(800, now);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.05);
+          } else if (type === 'success') {
+            [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+              gain.gain.setValueAtTime(0.16, now + idx * 0.07);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.25);
+              osc.connect(gain);
+              gain.connect(this.ctx.destination);
+              osc.start(now + idx * 0.07);
+              osc.stop(now + idx * 0.07 + 0.25);
+            });
+          } else if (type === 'boom') {
+            // White noise + low oscillator for explosion
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.exponentialRampToValueAtTime(28, now + 0.65);
+            gain.gain.setValueAtTime(0.35, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.65);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.65);
+          } else if (type === 'fanfare') {
+            [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+              gain.gain.setValueAtTime(0.2, now + idx * 0.1);
+              gain.gain.exponentialRampToValueAtTime(0.005, now + idx * 0.1 + 0.45);
+              osc.connect(gain);
+              gain.connect(this.ctx.destination);
+              osc.start(now + idx * 0.1);
+              osc.stop(now + idx * 0.1 + 0.45);
+            });
+          }
+        } catch (e) {
+          // Ignore audio context restrictions
+        }
+      }
+    };
+
+    /**************************************************************
+     * CONFETTI CELEBRATION ENGINE
+     **************************************************************/
+    const Confetti = {
+      fire() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const pieces = Array.from({ length: 90 }, () => ({
+          x: Math.random() * canvas.width,
+          y: -20 - Math.random() * 100,
+          w: 7 + Math.random() * 6,
+          h: 10 + Math.random() * 8,
+          color: ['#a855f7', '#ec4899', '#facc15', '#38bdf8', '#4ade80', '#fb7185'][Math.floor(Math.random() * 6)],
+          vx: -3 + Math.random() * 6,
+          vy: 3 + Math.random() * 5,
+          angle: Math.random() * Math.PI * 2,
+          spin: -0.15 + Math.random() * 0.3
+        }));
+
+        let frame = 0;
+        function animate() {
+          frame++;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          pieces.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.08;
+            p.angle += p.spin;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          });
+          if (frame < 140) {
+            requestAnimationFrame(animate);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+    };
+
+    /**************************************************************
+     * GAME DATABASES & CONTENT (Rich Russian Party Content)
+     **************************************************************/
+    const DB = {
+      avatars: ['🦉', '🐬', '🦊', '🐼', '🐯', '🐸', '🦄', '🐙', '🦁', '🐨', '🦖', '👽', '🤖', '🐱', '🐶'],
+
+      games: [
+        {
+          id: 'gartic',
+          name: 'Гартик Фон (Испорченный телефон)',
+          minPlayers: 'от 3 игроков',
+          stats: '248 910',
+          badges: ['GARTIC', 'HIT'],
+          category: ['hit', 'draw', 'humor'],
+          icon: '🎨',
+          gradient: 'from-amber-500 via-orange-500 to-pink-600',
+          desc: 'Загадывайте безумные фразы, рисуйте их пальцем или мышкой, угадывайте чужие шедевры и смейтесь на финальном показе цепочек!'
+        },
+        {
+          id: 'bomb',
+          name: 'Слова-мины (Бомба)',
+          minPlayers: 'от 3 игроков',
+          stats: '140 383',
+          badges: ['HIT'],
+          category: ['hit', 'words'],
+          icon: '💣',
+          gradient: 'from-rose-500 via-red-600 to-orange-500',
+          desc: 'Объясните главное слово друзьям, пока тикает бомба, но НЕ произносите 5 запретных слов-мин из карточки!'
+        },
+        {
+          id: 'spy',
+          name: 'Пришелец среди нас (Шпион)',
+          minPlayers: 'от 3 игроков',
+          stats: '92 410',
+          badges: ['HIT'],
+          category: ['hit', 'bluff'],
+          icon: '👽',
+          gradient: 'from-emerald-500 via-teal-600 to-cyan-600',
+          desc: 'Все игроки знают секретную локацию, кроме одного Пришельца. Задавайте хитрые вопросы и вычислите шпиона до истечения времени!'
+        },
+        {
+          id: 'wave',
+          name: 'На одной волне (Спектр)',
+          minPlayers: 'от 2-3 игроков',
+          stats: '64 356',
+          badges: ['NEW', 'HIT'],
+          category: ['hit', 'words'],
+          icon: '🌊',
+          gradient: 'from-blue-500 via-indigo-500 to-purple-600',
+          desc: 'Почувствуйте интуицию друзей! Ведущий видит скрытую мишень между двумя противоположностями (например, «Холодное — Горячее») и даёт подсказку.'
+        },
+        {
+          id: 'haha',
+          name: 'Ха-Ха Батл & Мемодел',
+          minPlayers: 'от 3 игроков',
+          stats: '86 773',
+          badges: ['HIT'],
+          category: ['hit', 'humor'],
+          icon: '😂',
+          gradient: 'from-fuchsia-500 via-pink-500 to-rose-500',
+          desc: 'Придумывайте самые угарные добивки и подписи к жизненным ситуациям. Чья шутка соберёт больше голосов компании?'
+        },
+        {
+          id: 'oneword',
+          name: 'Одно слово (Кооператив)',
+          minPlayers: 'от 3 игроков',
+          stats: '38 804',
+          badges: ['NEW'],
+          category: ['words'],
+          icon: '☝️',
+          gradient: 'from-violet-600 via-purple-600 to-indigo-600',
+          desc: 'Все пишут по одному слову-подсказке для ведущего. Но будьте оригинальны: одинаковые подсказки сгорают и исчезают!'
+        },
+        {
+          id: 'lies',
+          name: 'Лживые факты (Правда или Блеф)',
+          minPlayers: 'от 3 игроков',
+          stats: '47 359',
+          badges: ['NEW'],
+          category: ['bluff', 'humor'],
+          icon: '🤥',
+          gradient: 'from-cyan-500 via-sky-600 to-blue-700',
+          desc: 'Безумные факты со всего света! Угадайте, где чистая правда, а где тонкий фейк, и заработайте максимум очков.'
+        },
+        {
+          id: 'crocodile',
+          name: 'Крокодил & Читай по губам',
+          minPlayers: 'от 2-3 игроков',
+          stats: '163 166',
+          badges: ['HIT'],
+          category: ['hit', 'draw', 'humor'],
+          icon: '🐊',
+          gradient: 'from-lime-500 via-emerald-500 to-teal-600',
+          desc: 'Классика вечеринок в двух режимах: показывайте слова жестами без звука или произносите скороговорки одними губами!'
+        },
+        {
+          id: 'when',
+          name: 'Когда это было? (Таймлайн)',
+          minPlayers: 'от 2-3 игроков',
+          stats: '31 172',
+          badges: ['NEW'],
+          category: ['bluff'],
+          icon: '⏳',
+          gradient: 'from-amber-500 via-yellow-600 to-orange-600',
+          desc: 'В каком году появился первый iPhone, песня «Кукушка» или мем с котом? Кто окажется ближе всех к реальному году — забирает банк!'
+        },
+        {
+          id: 'yandex',
+          name: 'Что ищут в Поиске?',
+          minPlayers: 'от 2-3 игроков',
+          stats: '41 311',
+          badges: ['NEW'],
+          category: ['humor', 'words'],
+          icon: '🔍',
+          gradient: 'from-red-500 via-amber-500 to-yellow-500',
+          desc: 'Угадайте самые странные и популярные продолжения реальных поисковых запросов в интернете!'
+        },
+        {
+          id: 'forehead',
+          name: 'Кто я? (Стикер на лбу)',
+          minPlayers: 'от 3 игроков',
+          stats: '56 931',
+          badges: ['HIT'],
+          category: ['words', 'humor'],
+          icon: '🏷️',
+          gradient: 'from-pink-500 via-purple-500 to-indigo-500',
+          desc: 'Приложите телефон ко лбу или отверните экран! Друзья отвечают «Да/Нет» на ваши вопросы, пока вы угадываете своего персонажа.'
+        },
+        {
+          id: 'debate',
+          name: 'Безумные Дебаты',
+          minPlayers: 'от 3 игроков',
+          stats: '23 854',
+          badges: ['NEW'],
+          category: ['humor', 'bluff'],
+          icon: '🎙️',
+          gradient: 'from-indigo-500 via-blue-600 to-cyan-500',
+          desc: 'Два игрока получают абсурдные позиции в споре (например: «Шаурма лучше суши») и за 45 секунд убеждают остальных проголосовать за них!'
+        }
+      ],
+
+      garticPrompts: [
+        'Кот-программист пьёт кофе в космосе',
+        'Голубь пытается украсть огромную шаурму',
+        'Динозавр на самокате опаздывает на работу',
+        'Бабушка побеждает киберспортсменов в компьютерном клубе',
+        'Медведь делает селфи на фоне пирамид в Египте',
+        'Пингвин загорает на пляже в солнечных очках',
+        'Инопланетянин стоит в очереди в поликлинике',
+        'Собака ведёт кулинарное шоу по телевизору',
+        'Рыцарь сражается с гигантским пылесосом',
+        'Осьминог играет сразу на трёх гитарах',
+        'Грустный снеговик в горячей бане',
+        'Акула работает стоматологом'
+      ],
+
+      bombCards: [
+        { word: 'ШАУРМА', mines: ['Лаваш', 'Мясо', 'Кебаб', 'Соус', 'Вокзал'] },
+        { word: 'БУДИЛЬНИК', mines: ['Утро', 'Звонок', 'Сон', 'Вставать', 'Часы'] },
+        { word: 'ХОЛОДИЛЬНИК', mines: ['Еда', 'Мороз', 'Кухня', 'Лёд', 'Полка'] },
+        { word: 'КАРАОКЕ', mines: ['Петь', 'Микрофон', 'Песня', 'Голос', 'Бар'] },
+        { word: 'ПЫЛЕСОС', mines: ['Уборка', 'Пыль', 'Ковёр', 'Шум', 'Труба'] },
+        { word: 'ИНТЕРНЕТ', mines: ['Сеть', 'Сайт', 'Вайфай', 'Браузер', 'Связь'] },
+        { word: 'ЧЕМОДАН', mines: ['Отпуск', 'Вещи', 'Поездка', 'Вокзал', 'Ручка'] },
+        { word: 'ПИЦЦА', mines: ['Италия', 'Сыр', 'Тесто', 'Круглая', 'Доставка'] },
+        { word: 'СТОМАТОЛОГ', mines: ['Зуб', 'Врач', 'Боль', 'Пломба', 'Сверлить'] },
+        { word: 'СВАДЬБА', mines: ['Невеста', 'Жених', 'Кольцо', 'Платье', 'ЗАГС'] },
+        { word: 'КОМАР', mines: ['Писк', 'Укус', 'Лето', 'Кровь', 'Насекомое'] },
+        { word: 'МЕТРО', mines: ['Поезд', 'Подземка', 'Станция', 'Эскалатор', 'Вагон'] }
+      ],
+
+      spyLocations: [
+        { place: 'Космическая станция 🚀', roles: ['Космонавт', 'Бортинженер', 'Космический турист', 'Учёный-биолог'] },
+        { place: 'Ночной клуб 🕺', roles: ['Диджей', 'Бармен', 'Охранник на входе', 'Король танцпола'] },
+        { place: 'Круизный лайнер 🚢', roles: ['Капитан', 'Богатый пассажир', 'Аниматор', 'Повар на камбузе'] },
+        { place: 'Съёмочная площадка кино 🎬', roles: ['Режиссёр', 'Каскадёр', 'Главный актёр', 'Гримёр'] },
+        { place: 'Ограбление банка 💰', roles: ['Кассир', 'Взломщик сейфов', 'Водитель на стрёме', 'Директор банка'] },
+        { place: 'Поезд Москва — Владивосток 🚆', roles: ['Проводник', 'Пассажир с курицей', 'Машинист', 'Попутчик на верхней полке'] },
+        { place: 'Средневековый замок 🏰', roles: ['Король', 'Придворный шут', 'Рыцарь стражи', 'Алхимик'] },
+        { place: 'Пляж в Сочи 🏖️', roles: ['Спасатель', 'Продавец кукурузы', 'Обгоревший турист', 'Мастер водных бананов'] }
+      ],
+
+      wavePairs: [
+        ['Ледяное 🥶', 'Обжигающее 🔥'],
+        ['Переоценено 🙄', 'Недооценено 💎'],
+        ['Бесполезная покупка 🗑️', 'Вещь первой необходимости 🏆'],
+        ['Герой кино 🦸', 'Злодей кино 🦹'],
+        ['Вкус детства 🍬', 'Взрослая еда 🥦'],
+        ['Скучное хобби 😴', 'Экстремальное хобби 🪂'],
+        ['Плохая идея для первого свидания 💔', 'Идеальное первое свидание ❤️'],
+        ['Дешёвый понт 🤡', 'Настоящая роскошь 👑'],
+        ['Странно делать утром 🌅', 'Нормально делать утром ☕']
+      ],
+
+      hahaPrompts: [
+        'Худшее, что можно случайно сказать вслух на созвоне с начальником:',
+        'Если бы коты умели писать отзывы на своих хозяев в интернете:',
+        'Причина, по которой инопланетяне до сих пор не вступили с нами в контакт:',
+        'Надпись на футболке, с которой тебя точно пустят без очереди:',
+        'Что на самом деле думает курьер, когда везёт заказ в 3 часа ночи:',
+        'Первая фраза в инструкции к взрослой жизни:',
+        'Самый странный супергерой, который нужен нашему городу:',
+        'Сообщение, которое страшно увидеть в домовом чате в 7 утра:'
+      ],
+
+      oneWordTargets: [
+        'ШАМПАНСКОЕ', 'ДИНОЗАВР', 'ТЕЛЕВИЗОР', 'БАТАРЕЙКА', 'ПИРАМИДА',
+        'БУТЕРБРОД', 'ПАРАШЮТ', 'КАКТУС', 'БУМЕРАНГ', 'АКВАРИУМ',
+        'ЧЕБУРАШКА', 'МИКРОВОЛНОВКА'
+      ],
+
+      liesQuestions: [
+        {
+          fact: 'В Швейцарии законом запрещено держать дома только одну морскую свинку — нужно заводить минимум пару, чтобы им не было одиноко.',
+          isTrue: true,
+          explanation: 'Чистая правда! Морские свинки — социальные животные, и в Швейцарии существуют специальные службы по «аренде» компаньонов.'
+        },
+        {
+          fact: 'Осьминоги имеют три сердца, а их кровь голубого цвета из-за меди в составе.',
+          isTrue: true,
+          explanation: 'Правда! Два сердца качают кровь к жабрам, а третье — ко всему телу.'
+        },
+        {
+          fact: 'Эйфелева башня зимой вырастает на 15 сантиметров из-за особого строения кристаллов французской стали на морозе.',
+          isTrue: false,
+          explanation: 'Ложь! Всё наоборот: башня вырастает на 15 см ЛЕТОМ от жары из-за теплового расширения металла.'
+        },
+        {
+          fact: 'Клубника с точки зрения ботаники не является ягодой, а вот банан и арбуз — самые настоящие ягоды.',
+          isTrue: true,
+          explanation: 'Чистая правда! Ботаническая классификация полна сюрпризов.'
+        },
+        {
+          fact: 'В Древнем Риме гладиаторы перед боем обязательно пили гранатовый сок со льдом для храбрости.',
+          isTrue: false,
+          explanation: 'Ложь! На самом деле гладиаторы пили напиток из древесной золы и уксуса для укрепления костей.'
+        },
+        {
+          fact: 'Ленивцы задерживают дыхание под водой дольше, чем дельфины (до 40 минут!).',
+          isTrue: true,
+          explanation: 'Правда! Замедляя пульс в 3 раза, ленивец может не дышать до 40 минут, а дельфин — около 10–15 минут.'
+        }
+      ],
+
+      crocodileWords: {
+        easy: ['Кенгуру', 'Гитарист', 'Селфи', 'Штангист', 'Снеговик', 'Балерина', 'Чихание', 'Рыбалка', 'Зонтик', 'Вертолёт'],
+        medium: ['Опоздание на поезд', 'Застрявший в лифте', 'Горячий песок на пляже', 'Сборка шкафа без инструкции', 'Комар в темноте', 'Гололёд утром', 'Очередь на кассе'],
+        hard: ['Синдром самозванца', 'Ипотека на 30 лет', 'Ностальгия по 2007 году', 'Дедлайн вчера', 'Философский камень', 'Искусственный интеллект', 'Криптовалюта']
+      },
+
+      timelineEvents: [
+        { title: 'Выход первого смартфона Apple iPhone', year: 2007 },
+        { title: 'Запуск видеохостинга YouTube', year: 2005 },
+        { title: 'Премьера первого фильма «Гарри Поттер и философский камень»', year: 2001 },
+        { title: 'Полёт Юрия Гагарина в космос', year: 1961 },
+        { title: 'Выход игры Minecraft (первая публичная версия)', year: 2009 },
+        { title: 'Премьера мультфильма «Шрек»', year: 2001 },
+        { title: 'Запуск социальной сети ВКонтакте', year: 2006 },
+        { title: 'Победа сборной Франции на ЧМ по футболу в России', year: 2018 }
+      ],
+
+      searchQueries: [
+        {
+          prefix: 'Почему мой кот...',
+          options: [
+            { text: '...смотрит в угол стены и орёт', pts: 100 },
+            { text: '...мнёт лапками одеяло перед сном', pts: 80 },
+            { text: '...боится огурцов на кухне', pts: 60 },
+            { text: '...не платит за квартиру', pts: 40 }
+          ]
+        },
+        {
+          prefix: 'Как незаметно...',
+          options: [
+            { text: '...уйти с работы пораньше', pts: 100 },
+            { text: '...съесть вкусняшку ночью, чтобы не шуршала упаковка', pts: 85 },
+            { text: '...проверить телефон второй половинки', pts: 65 },
+            { text: '...уснуть на лекции с открытыми глазами', pts: 45 }
+          ]
+        },
+        {
+          prefix: 'Что делать, если я случайно...',
+          options: [
+            { text: '...лайкнул фото бывшей за 2016 год', pts: 100 },
+            { text: '...проглотил жвачку', pts: 80 },
+            { text: '...постирал паспорт в машинке', pts: 60 },
+            { text: '...согласился выйти на работу в субботу', pts: 40 }
+          ]
+        }
+      ],
+
+      foreheadCharacters: [
+        'Шрек 🧌', 'Гарри Поттер ⚡', 'Человек-паук 🕷️', 'Дарт Вейдер ⚔️',
+        'Губка Боб 🧽', 'Илон Маск 🚀', 'Чебурашка 🍊', 'Шерлок Холмс 🔍',
+        'Колобок 🥯', 'Джек Воробей 🏴‍☠️', 'Терминатор 🤖', 'Баба-Яга 🧹'
+      ],
+
+      debateTopics: [
+        { q: 'Где лучше отдыхать в отпуске?', a: 'Лёжа на пляже с коктейлем 🏖️', b: 'В походе в горах с палаткой ⛺' },
+        { q: 'Какая суперспособность полезнее в жизни?', a: 'Телепортация без пробок ⚡', b: 'Чтение мыслей собеседника 🧠' },
+        { q: 'Что лучше заказать на вечеринку?', a: 'Горячую пиццу с пепперони 🍕', b: 'Огромный сет роллов 🍣' },
+        { q: 'Кем быть круче?', a: 'Совой (жизнь начинается после 23:00) 🦉', b: 'Жаворонком (бодрячком в 6 утра) 🐦' }
+      ]
+    };
+
+    /**************************************************************
+     * MAIN APPLICATION CONTROLLER
+     **************************************************************/
+    const App = {
+      roomCode: '428-355',
+      currentCategory: 'all',
+      newAvatarIdx: 2,
+      activeGameId: null,
+      activeTimer: null,
+      channel: null,
+
+      players: [
+        { id: 1, name: 'Сова (Хост)', avatar: '🦉', score: 12, isHost: true },
+        { id: 2, name: 'Дельфин', avatar: '🐬', score: 9, isHost: false },
+        { id: 3, name: 'Лисичка', avatar: '🦊', score: 15, isHost: false },
+        { id: 4, name: 'Панда', avatar: '🐼', score: 8, isHost: false }
+      ],
+
+      history: [
+        {
+          id: 101,
+          gameName: 'Гартик Фон',
+          icon: '🎨',
+          time: '10 мин назад',
+          winner: 'Лисичка 🦊',
+          summary: 'Цепочка: «Кот-программист в космосе» → превратилась в «Инопланетная белка с ноутбуком»!'
+        }
+      ],
+
+      init() {
+        // Setup BroadcastChannel for multi-tab sync
+        if ('BroadcastChannel' in window) {
+          this.channel = new BroadcastChannel('partyfun_room_sync');
+          this.channel.onmessage = (e) => {
+            if (e.data && e.data.type === 'SYNC_PLAYERS') {
+              this.players = e.data.players;
+              this.renderPlayers();
+            }
+          };
+        }
+
+        // Load saved state if available
+        const savedPlayers = localStorage.getItem('partyfun_players');
+        if (savedPlayers) {
+          try {
+            const parsed = JSON.parse(savedPlayers);
+            if (Array.isArray(parsed) && parsed.length >= 2) this.players = parsed;
+          } catch (e) {}
+        }
+
+        this.renderPlayers();
+        this.renderGamesCatalog();
+        this.updateHistoryBadges();
+      },
+
+      saveState() {
+        localStorage.setItem('partyfun_players', JSON.stringify(this.players));
+        if (this.channel) {
+          this.channel.postMessage({ type: 'SYNC_PLAYERS', players: this.players });
+        }
+      },
+
+      toast(message, icon = '✨') {
+        const container = document.getElementById('toast-container');
+        const el = document.createElement('div');
+        el.className = 'glass-card px-4 py-3 rounded-2xl border border-pink-500/40 text-white text-xs sm:text-sm font-medium flex items-center gap-2.5 shadow-xl pointer-events-auto transition-all duration-300';
+        el.innerHTML = `<span class="text-lg">${icon}</span><span>${message}</span>`;
+        container.appendChild(el);
+        setTimeout(() => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(10px)';
+          setTimeout(() => el.remove(), 300);
+        }, 2800);
+      },
+
+      copyRoomCode() {
+        Sound.play('click');
+        const url = window.location.href;
+        const textToCopy = `Присоединяйся к нашей комнате PartyFun! Код: ${this.roomCode} (${url})`;
+        const temp = document.createElement('textarea');
+        temp.value = textToCopy;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        temp.remove();
+        this.toast(`Код комнаты ${this.roomCode} скопирован!`, '📋');
+      },
+
+      toggleSound() {
+        Sound.enabled = !Sound.enabled;
+        const icon = document.getElementById('sound-icon');
+        if (Sound.enabled) {
+          icon.className = 'fa-solid fa-volume-high text-emerald-400';
+          Sound.play('click');
+          this.toast('Звуковые эффекты включены', '🔊');
+        } else {
+          icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+          this.toast('Звук выключен', '🔇');
+        }
+      },
+
+      cycleNewAvatar() {
+        Sound.play('click');
+        this.newAvatarIdx = (this.newAvatarIdx + 1) % DB.avatars.length;
+        document.getElementById('new-player-avatar-btn').textContent = DB.avatars[this.newAvatarIdx];
+      },
+
+      addPlayer(e) {
+        e.preventDefault();
+        Sound.play('click');
+        const input = document.getElementById('new-player-input');
+        const name = input.value.trim() || `Игрок ${this.players.length + 1}`;
+        const avatar = DB.avatars[this.newAvatarIdx];
+
+        this.players.push({
+          id: Date.now(),
+          name,
+          avatar,
+          score: 0,
+          isHost: this.players.length === 0
+        });
+
+        input.value = '';
+        this.cycleNewAvatar();
+        this.saveState();
+        this.renderPlayers();
+        this.toast(`${avatar} ${name} присоединился к вечеринке!`, '🎉');
+      },
+
+      removePlayer(id) {
+        if (this.players.length <= 2) {
+          this.toast('Для игр компании нужно минимум 2–3 участника!', '⚠️');
+          return;
+        }
+        Sound.play('click');
+        this.players = this.players.filter(p => p.id !== id);
+        if (!this.players.some(p => p.isHost) && this.players.length > 0) {
+          this.players[0].isHost = true;
+        }
+        this.saveState();
+        this.renderPlayers();
+      },
+
+      addScore(playerId, points) {
+        const p = this.players.find(pl => pl.id === playerId);
+        if (p) {
+          p.score += points;
+          this.saveState();
+          this.renderPlayers();
+        }
+      },
+
+      resetScores() {
+        Sound.play('click');
+        this.players.forEach(p => p.score = 0);
+        this.saveState();
+        this.renderPlayers();
+        this.toast('Очки всех участников обнулены', '🔄');
+      },
+
+      renderPlayers() {
+        const list = document.getElementById('players-list');
+        const countLabel = document.getElementById('players-count-label');
+        const badge = document.getElementById('min-players-badge');
+
+        countLabel.textContent = `(${this.players.length})`;
+        if (this.players.length >= 3) {
+          badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+          badge.textContent = `✓ Компания из ${this.players.length} чел. — все игры доступны!`;
+        } else {
+          badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30';
+          badge.textContent = 'Добавьте 3-го игрока для полного веселья!';
+        }
+
+        // Sort copy to find leader
+        const maxScore = Math.max(...this.players.map(p => p.score), 0);
+
+        list.innerHTML = this.players.map(p => `
+          <div class="relative group flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border ${p.score > 0 && p.score === maxScore ? 'border-amber-400/50 bg-amber-500/10' : 'border-white/10'} transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-white/15 flex items-center justify-center text-2xl shrink-0">
+                ${p.avatar}
+                ${p.isHost ? '<i class="fa-solid fa-crown text-[11px] text-amber-400 absolute -top-1.5 -left-1.5 drop-shadow" title="Хост комнаты"></i>' : ''}
+              </div>
+              <div class="min-w-0">
+                <p class="font-semibold text-xs sm:text-sm text-white truncate">${p.name}</p>
+                <div class="flex items-center gap-1 text-[11px] text-amber-300 font-bold">
+                  <i class="fa-solid fa-star text-[10px]"></i>
+                  <span>${p.score} очк.</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="App.removePlayer(${p.id})" class="opacity-60 group-hover:opacity-100 w-7 h-7 rounded-lg hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 flex items-center justify-center transition" title="Удалить игрока">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </div>
+        `).join('');
+      },
+
+      setCategory(cat) {
+        Sound.play('click');
+        this.currentCategory = cat;
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+          if (btn.dataset.cat === cat) {
+            btn.className = 'cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/25';
+          } else {
+            btn.className = 'cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10';
+          }
+        });
+        this.renderGamesCatalog();
+      },
+
+      filterGames() {
+        this.renderGamesCatalog();
+      },
+
+      renderGamesCatalog() {
+        const grid = document.getElementById('games-grid');
+        const query = (document.getElementById('game-search-input')?.value || '').toLowerCase().trim();
+
+        const filtered = DB.games.filter(g => {
+          const matchesCat = this.currentCategory === 'all' || g.category.includes(this.currentCategory);
+          const matchesQuery = !query || g.name.toLowerCase().includes(query) || g.desc.toLowerCase().includes(query);
+          return matchesCat && matchesQuery;
+        });
+
+        grid.innerHTML = filtered.map(g => {
+          const badgesHtml = g.badges.map(b => {
+            if (b === 'GARTIC') return `<span class="badge-gartic px-2 py-0.5 rounded-lg text-[10px] tracking-wider uppercase">🎨 ГАРТИК ХИТ</span>`;
+            if (b === 'HIT') return `<span class="badge-hit px-2 py-0.5 rounded-lg text-[10px] tracking-wider uppercase">HIT</span>`;
+            return `<span class="badge-new px-2 py-0.5 rounded-lg text-[10px] tracking-wider uppercase">NEW</span>`;
+          }).join('');
+
+          return `
+            <div onclick="App.launchGame('${g.id}')" class="glass-card glass-card-hover rounded-3xl p-4 flex flex-col justify-between cursor-pointer group relative overflow-hidden">
+              <div>
+                <!-- Cover Banner -->
+                <div class="h-32 rounded-2xl bg-gradient-to-br ${g.gradient} p-3.5 flex flex-col justify-between relative overflow-hidden shadow-inner">
+                  <div class="flex items-center justify-between z-10">
+                    <div class="flex items-center gap-1.5">${badgesHtml}</div>
+                    <div class="px-2 py-0.5 rounded-lg bg-black/35 backdrop-blur-md text-[11px] font-semibold text-white flex items-center gap-1">
+                      <i class="fa-solid fa-fire text-amber-300 text-[10px]"></i>
+                      <span>${g.stats}</span>
+                    </div>
+                  </div>
+                  <div class="text-5xl self-center transform group-hover:scale-110 group-hover:-rotate-6 transition duration-300 drop-shadow-md">
+                    ${g.icon}
+                  </div>
+                  <div class="text-[11px] font-bold text-white/90 bg-black/30 backdrop-blur-sm self-start px-2.5 py-0.5 rounded-full">
+                    <i class="fa-solid fa-user-group text-[10px] mr-1"></i>${g.minPlayers}
+                  </div>
+                </div>
+
+                <!-- Title & Desc -->
+                <div class="mt-3.5 space-y-1.5 px-1">
+                  <h3 class="font-display font-bold text-base text-white group-hover:text-pink-300 transition">${g.name}</h3>
+                  <p class="text-xs text-slate-300 line-clamp-3 leading-relaxed">${g.desc}</p>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between px-1">
+                <span class="text-xs font-semibold text-purple-300 group-hover:text-pink-300 transition">Запустить игру</span>
+                <div class="w-8 h-8 rounded-xl bg-white/10 group-hover:bg-pink-500 text-white flex items-center justify-center transition">
+                  <i class="fa-solid fa-play text-xs"></i>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      pickRandomGame() {
+        Sound.play('fanfare');
+        const randomGame = DB.games[Math.floor(Math.random() * DB.games.length)];
+        this.toast(`Случайный выбор: ${randomGame.name}!`, randomGame.icon);
+        this.launchGame(randomGame.id);
+      },
+
+      clearActiveTimer() {
+        if (this.activeTimer) {
+          clearInterval(this.activeTimer);
+          this.activeTimer = null;
+        }
+      },
+
+      returnToLobby() {
+        Sound.play('click');
+        this.clearActiveTimer();
+        this.activeGameId = null;
+        document.getElementById('game-view').classList.add('hidden');
+        document.getElementById('lobby-view').classList.remove('hidden');
+        this.renderPlayers();
+      },
+
+      restartCurrentGame() {
+        if (this.activeGameId) {
+          this.launchGame(this.activeGameId);
+        }
+      },
+
+      recordHistory(gameName, icon, winner, summary) {
+        this.history.unshift({
+          id: Date.now(),
+          gameName,
+          icon,
+          time: 'Только что',
+          winner,
+          summary
+        });
+        this.updateHistoryBadges();
+      },
+
+      updateHistoryBadges() {
+        const count = this.history.length;
+        document.getElementById('history-count-badge').textContent = count;
+        document.getElementById('history-pill-count').textContent = `${count} ${count === 1 ? 'игра' : (count < 5 ? 'игры' : 'игр')}`;
+      },
+
+      launchGame(gameId) {
+        Sound.play('click');
+        this.clearActiveTimer();
+        this.activeGameId = gameId;
+
+        const game = DB.games.find(g => g.id === gameId);
+        if (!game) return;
+
+        document.getElementById('lobby-view').classList.add('hidden');
+        document.getElementById('game-view').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        document.getElementById('active-game-icon').textContent = game.icon;
+        document.getElementById('active-game-title').textContent = game.name;
+        document.getElementById('active-game-subtitle').textContent = game.desc;
+
+        // Route to specific game engine
+        switch (gameId) {
+          case 'gartic': GarticEngine.start(); break;
+          case 'bomb': BombEngine.start(); break;
+          case 'spy': SpyEngine.start(); break;
+          case 'wave': WaveEngine.start(); break;
+          case 'haha': HahaEngine.start(); break;
+          case 'oneword': OneWordEngine.start(); break;
+          case 'lies': LiesEngine.start(); break;
+          case 'crocodile': CrocodileEngine.start(); break;
+          case 'when': TimelineEngine.start(); break;
+          case 'yandex': SearchEngine.start(); break;
+          case 'forehead': ForeheadEngine.start(); break;
+          case 'debate': DebateEngine.start(); break;
+        }
+      },
+
+      /**************************************************************
+       * MODALS (History, Rules, GitHub Export, VIP)
+       **************************************************************/
+      openModal(html) {
+        const backdrop = document.getElementById('modal-backdrop');
+        const content = document.getElementById('modal-content');
+        content.innerHTML = html;
+        backdrop.classList.remove('hidden');
+      },
+
+      closeModal() {
+        document.getElementById('modal-backdrop').classList.add('hidden');
+      },
+
+      openHistoryModal() {
+        Sound.play('click');
+        const itemsHtml = this.history.map(h => `
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 font-bold text-white text-sm">
+                <span class="text-xl">${h.icon}</span>
+                <span>${h.gameName}</span>
+              </div>
+              <span class="text-[11px] text-slate-400">${h.time}</span>
+            </div>
+            <p class="text-xs text-slate-300">${h.summary}</p>
+            <div class="text-xs text-amber-300 font-semibold pt-1">🏆 Герой раунда: ${h.winner}</div>
+          </div>
+        `).join('');
+
+        this.openModal(`
+          <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-clock-rotate-left text-pink-400 text-xl"></i>
+              <h3 class="font-display font-bold text-lg text-white">История вашей встречи</h3>
+            </div>
+            <button onclick="App.closeModal()" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="space-y-3 max-h-96 overflow-y-auto pr-1">
+            ${itemsHtml}
+          </div>
+          <div class="flex justify-end pt-2">
+            <button onclick="App.closeModal()" class="neon-btn px-5 py-2.5 rounded-xl font-bold text-xs text-white">Отлично</button>
+          </div>
+        `);
+      },
+
+      openRulesModal() {
+        Sound.play('click');
+        this.openModal(`
+          <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-book-open text-purple-400 text-xl"></i>
+              <h3 class="font-display font-bold text-lg text-white">Как играть компанией (3+ человек)</h3>
+            </div>
+            <button onclick="App.closeModal()" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <div class="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-400/30">
+              <strong class="text-white block mb-1">📱 Способ 1: В одной комнате (На одном телефоне / планшете / ноутбуке)</strong>
+              Добавьте имена всех друзей в список участников. В играх со скрытыми ролями («Гартик Фон», «Пришелец среди нас», «Одно слово») на экране появляется специальная защита «Передайте устройство игроку X», чтобы никто не подсмотрел чужой секрет!
+            </div>
+            <div class="p-3.5 rounded-2xl bg-pink-500/10 border border-pink-400/30">
+              <strong class="text-white block mb-1">💻 Способ 2: Онлайн-вечеринка (Discord, Telegram, Zoom)</strong>
+              Хост включает демонстрацию экрана. В таких играх как «Слова-мины», «На одной волне», «Лживые факты», «Что ищут в Поиске» и «Крокодил» вся компания играет синхронно, глядя на экран ведущего!
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <strong class="text-amber-300">🎨 Гартик Фон:</strong> 1-й пишет фразу → 2-й рисует её → 3-й пытается угадать, что это → Финальный показ всей цепочки!
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <strong class="text-rose-300">💣 Слова-мины:</strong> Объясните слово на время, избегая 5 запретных слов-ловушек.
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <strong class="text-emerald-300">👽 Пришелец:</strong> У всех одна секретная локация, а у одного — роль Шпиона. Задавайте вопросы!
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <strong class="text-sky-300">🌊 На одной волне:</strong> Ведущий загадывает ассоциацию на шкале, а команда двигает стрелку.
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end pt-2">
+            <button onclick="App.closeModal()" class="neon-btn px-5 py-2.5 rounded-xl font-bold text-xs text-white">Понятно, в игру!</button>
+          </div>
+        `);
+      },
+
+      openVipModal() {
+        Sound.play('fanfare');
+        Confetti.fire();
+        this.openModal(`
+          <div class="text-center space-y-4 py-2">
+            <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-400 to-pink-500 mx-auto flex items-center justify-center text-3xl text-white shadow-xl">
+              👑
+            </div>
+            <h3 class="font-display font-bold text-xl text-white">Полный безлимитный доступ активирован!</h3>
+            <p class="text-sm text-slate-300 max-w-md mx-auto">
+              На вашем сайте все 12 игр, включая «Гартик Фон», «Слова-мины» и «Пришелец среди нас», полностью бесплатны и без ограничений по времени или раундам!
+            </p>
+            <button onclick="App.closeModal()" class="neon-btn px-6 py-3 rounded-2xl font-bold text-sm text-white">Супер! 🎉</button>
+          </div>
+        `);
+      },
+
+      openGithubModal() {
+        Sound.play('click');
+        this.openModal(`
+          <div class="flex items-center justify-between border-b border-white/10 pb-4">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-github text-white text-2xl"></i>
+              <h3 class="font-display font-bold text-lg text-white">Как выложить сайт на GitHub Pages</h3>
+            </div>
+            <button onclick="App.closeModal()" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="space-y-4 text-xs sm:text-sm text-slate-300">
+            <p>Весь этот портал с 12 играми, графическим холстом Гартик Фон и звуковым движком собран в <strong>одном файле <code>index.html</code></strong>. Вы можете опубликовать его бесплатно за 1 минуту:</p>
+            <ol class="list-decimal list-inside space-y-2 bg-black/30 p-4 rounded-2xl border border-white/10">
+              <li>Нажмите кнопку <strong>«Скачать готовый index.html»</strong> ниже.</li>
+              <li>Создайте новый публичный репозиторий на <a href="https://github.com/new" target="_blank" class="text-pink-400 underline">GitHub.com</a> и загрузите туда файл <code>index.html</code>.</li>
+              <li>Перейдите в <strong>Settings → Pages</strong>, выберите ветку <code>main</code> и нажмите <strong>Save</strong>. Ваша ссылка будет готова для друзей!</li>
+            </ol>
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <button onclick="App.downloadHtmlFile()" class="neon-btn px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm text-white flex items-center gap-2">
+                <i class="fa-solid fa-download"></i>
+                <span>Скачать готовый index.html</span>
+              </button>
+              <button onclick="App.closeModal()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-white">Закрыть</button>
+            </div>
+          </div>
+        `);
+      },
+
+      downloadHtmlFile() {
+        Sound.play('success');
+        const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        this.toast('Файл index.html скачан! Готово к загрузке на GitHub', '🚀');
+      }
+    };
+
+    /**************************************************************
+     * 1. GARTIC PHONE ENGINE (Гартик Фон — Испорченный телефон)
+     * Full multi-step workflow: Prompt -> Draw on Canvas -> Guess -> Album Reveal
+     **************************************************************/
+    const GarticEngine = {
+      step: 0, // 0: Prompt, 1: Draw, 2: Guess, 3: Draw2 (if 4+ players), 4: Reveal
+      stepsLog: [], // Array of { author, type: 'text'|'draw'|'guess', content }
+      brushColor: '#111827',
+      brushSize: 6,
+      isDrawing: false,
+      historyStack: [],
+
+      start() {
+        this.step = 0;
+        this.stepsLog = [];
+        document.getElementById('active-game-round-pill').textContent = 'Этап 1 из 3: Загадка';
+        this.renderStep();
+      },
+
+      getPlayer(idx) {
+        return App.players[idx % App.players.length];
+      },
+
+      renderStep() {
+        const stage = document.getElementById('game-stage');
+        const currentPlayer = this.getPlayer(this.step);
+
+        // Step 0: Write original bizarre prompt
+        if (this.step === 0) {
+          const randomIdea = DB.garticPrompts[Math.floor(Math.random() * DB.garticPrompts.length)];
+          stage.innerHTML = `
+            <div class="max-w-xl mx-auto w-full my-auto space-y-6 text-center">
+              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold">
+                <span>Ход игрока: ${currentPlayer.avatar} ${currentPlayer.name}</span>
+              </div>
+              <h3 class="font-display font-bold text-2xl sm:text-3xl text-white">Придумайте смешную фразу для рисования! 🎨</h3>
+              <p class="text-xs sm:text-sm text-slate-300">Следующий игрок (${this.getPlayer(1).avatar} ${this.getPlayer(1).name}) должен будет это нарисовать!</p>
+              
+              <div class="space-y-3">
+                <input id="gartic-prompt-input" type="text" value="${randomIdea}" maxlength="70" class="w-full px-4 py-3.5 rounded-2xl bg-black/50 border border-white/20 text-white text-center font-semibold text-sm sm:text-base focus:outline-none focus:border-pink-500" placeholder="Например: Кот-пират на скейте...">
+                <div class="flex flex-wrap justify-center gap-2">
+                  <button onclick="GarticEngine.randomizePrompt()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-amber-300 flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Сгенерировать другую идею</span>
+                  </button>
+                </div>
+              </div>
+
+              <button onclick="GarticEngine.submitPrompt()" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm sm:text-base text-white">
+                Готово! Передать ход художнику →
+              </button>
+            </div>
+          `;
+        }
+        // Step 1: Pass screen before Drawing
+        else if (this.step === 1) {
+          document.getElementById('active-game-round-pill').textContent = 'Этап 2 из 3: Холст художника';
+          const prevPrompt = this.stepsLog[this.stepsLog.length - 1].content;
+          stage.innerHTML = `
+            <div class="max-w-3xl mx-auto w-full space-y-4">
+              <!-- Top instructions -->
+              <div class="flex flex-wrap items-center justify-between gap-2 bg-white/5 p-3.5 rounded-2xl border border-white/10">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl">${currentPlayer.avatar}</span>
+                  <div>
+                    <div class="text-xs text-slate-400">Рисует художник: <strong class="text-white">${currentPlayer.name}</strong></div>
+                    <div class="text-sm sm:text-base font-bold text-amber-300">Задание: «${prevPrompt}»</div>
+                  </div>
+                </div>
+                <button onclick="GarticEngine.finishDrawing()" class="neon-btn px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white flex items-center gap-2">
+                  <i class="fa-solid fa-check"></i>
+                  <span>Шедевр готов!</span>
+                </button>
+              </div>
+
+              <!-- Canvas Container -->
+              <div class="rounded-2xl overflow-hidden border-2 border-purple-500/50 shadow-2xl bg-white relative">
+                <canvas id="gartic-canvas" width="720" height="420" class="w-full h-[290px] sm:h-[370px] block"></canvas>
+              </div>
+
+              <!-- Drawing Toolbar (Colors, Brush Sizes, Undo, Clear) -->
+              <div class="flex flex-wrap items-center justify-between gap-3 bg-black/40 p-3 rounded-2xl border border-white/10">
+                <!-- Color Palette -->
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  ${['#111827', '#ef4444', '#f97316', '#facc15', '#22c55e', '#3b82f6', '#a855f7', '#ec4899', '#854d0e', '#ffffff'].map(col => `
+                    <button onclick="GarticEngine.setColor('${col}')" class="w-7 h-7 rounded-full border-2 ${this.brushColor === col ? 'border-white scale-110' : 'border-transparent'} transition" style="background-color: ${col};" title="${col === '#ffffff' ? 'Ластик' : 'Цвет'}"></button>
+                  `).join('')}
+                </div>
+
+                <!-- Brush Sizes & Actions -->
+                <div class="flex items-center gap-2">
+                  <button onclick="GarticEngine.setSize(4)" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs text-white">Тонкая</button>
+                  <button onclick="GarticEngine.setSize(9)" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs text-white">Средняя</button>
+                  <button onclick="GarticEngine.setSize(18)" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs text-white">Толстая</button>
+                  <button onclick="GarticEngine.undoCanvas()" class="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold" title="Отменить штрих">
+                    <i class="fa-solid fa-rotate-left"></i>
+                  </button>
+                  <button onclick="GarticEngine.clearCanvas()" class="px-3 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold" title="Очистить холст">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          setTimeout(() => this.initCanvas(), 50);
+        }
+        // Step 2: Guess the Drawing (WITHOUT seeing original text prompt!)
+        else if (this.step === 2) {
+          document.getElementById('active-game-round-pill').textContent = 'Этап 3 из 3: Что тут нарисовано?';
+          const drawingDataUrl = this.stepsLog[this.stepsLog.length - 1].content;
+          stage.innerHTML = `
+            <div class="max-w-xl mx-auto w-full my-auto space-y-5 text-center">
+              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-300 text-xs font-bold">
+                <span>Угадывает детектив: ${currentPlayer.avatar} ${currentPlayer.name}</span>
+              </div>
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-white">Что пытался изобразить ${this.getPlayer(1).name}? 🤔</h3>
+              <div class="rounded-2xl overflow-hidden border-2 border-white/20 bg-white max-w-md mx-auto shadow-xl">
+                <img src="${drawingDataUrl}" alt="Рисунок игрока" class="w-full h-auto block">
+              </div>
+              <input id="gartic-guess-input" type="text" maxlength="70" placeholder="Напишите вашу версию (чем смешнее, тем лучше!)..." class="w-full px-4 py-3.5 rounded-2xl bg-black/50 border border-white/20 text-white text-center font-semibold text-sm sm:text-base focus:outline-none focus:border-pink-500">
+              <button onclick="GarticEngine.submitGuess()" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm sm:text-base text-white">
+                Отправить догадку и открыть финал! 🎉
+              </button>
+            </div>
+          `;
+        }
+        // Step 3: Grand Finale Album Reveal
+        else if (this.step === 3) {
+          Sound.play('fanfare');
+          Confetti.fire();
+          document.getElementById('active-game-round-pill').textContent = 'Финал: Презентация альбома!';
+          const original = this.stepsLog[0];
+          const drawing = this.stepsLog[1];
+          const guess = this.stepsLog[2];
+
+          App.recordHistory('Гартик Фон', '🎨', `${drawing.author.avatar} ${drawing.author.name}`, `Загадали: «${original.content}» → Угадали: «${guess.content}»`);
+
+          stage.innerHTML = `
+            <div class="max-w-2xl mx-auto w-full space-y-5">
+              <div class="text-center space-y-1">
+                <h3 class="font-display font-bold text-2xl text-white">Альбом «Испорченный телефон» 🤣</h3>
+                <p class="text-xs text-slate-300">Посмотрите, во что превратилась исходная фраза, и наградите лучших!</p>
+              </div>
+
+              <div class="space-y-4">
+                <!-- 1. Original Prompt Bubble -->
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-3">
+                  <div class="text-3xl">${original.author.avatar}</div>
+                  <div class="flex-1">
+                    <div class="text-xs text-slate-400">${original.author.name} загадал(а):</div>
+                    <div class="font-bold text-base sm:text-lg text-amber-300 mt-0.5">«${original.content}»</div>
+                  </div>
+                </div>
+
+                <!-- 2. Drawing Bubble -->
+                <div class="p-4 rounded-2xl bg-purple-500/10 border border-purple-400/30 space-y-2">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-xs text-purple-200">
+                      <span class="text-xl">${drawing.author.avatar}</span>
+                      <span><strong>${drawing.author.name}</strong> нарисовал(а) этот шедевр:</span>
+                    </div>
+                    <button onclick="App.addScore(${drawing.author.id}, 3); App.toast('+3 очка художнику!', '🎨')" class="px-3 py-1 rounded-xl bg-pink-500/20 hover:bg-pink-500/40 text-pink-300 text-xs font-bold transition">
+                      ❤️ Лайк художнику (+3)
+                    </button>
+                  </div>
+                  <div class="rounded-xl overflow-hidden bg-white max-w-md mx-auto border border-white/20">
+                    <img src="${drawing.content}" alt="Шедевр" class="w-full h-auto block">
+                  </div>
+                </div>
+
+                <!-- 3. Guess Bubble -->
+                <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <div class="text-3xl">${guess.author.avatar}</div>
+                    <div>
+                      <div class="text-xs text-emerald-300">${guess.author.name} подумал(а), что это:</div>
+                      <div class="font-bold text-base sm:text-lg text-white mt-0.5">«${guess.content}»</div>
+                    </div>
+                  </div>
+                  <button onclick="App.addScore(${guess.author.id}, 3); App.toast('+3 очка за догадку!', '🔥')" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 text-xs font-bold shrink-0 transition">
+                    😂 Засчитать (+3)
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex justify-center gap-3 pt-2">
+                <button onclick="GarticEngine.rotateAndRestart()" class="neon-btn px-6 py-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-white flex items-center gap-2">
+                  <i class="fa-solid fa-forward"></i>
+                  <span>Следующая цепочка (сдвинуть игроков)</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      },
+
+      randomizePrompt() {
+        Sound.play('click');
+        const input = document.getElementById('gartic-prompt-input');
+        if (input) {
+          input.value = DB.garticPrompts[Math.floor(Math.random() * DB.garticPrompts.length)];
+        }
+      },
+
+      submitPrompt() {
+        Sound.play('success');
+        const val = document.getElementById('gartic-prompt-input')?.value.trim() || 'Кот в космосе';
+        this.stepsLog.push({ author: this.getPlayer(0), type: 'text', content: val });
+        this.step = 1;
+        this.renderStep();
+      },
+
+      initCanvas() {
+        const canvas = document.getElementById('gartic-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        this.historyStack = [canvas.toDataURL()];
+
+        const getPos = (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+          };
+        };
+
+        const startDraw = (e) => {
+          e.preventDefault();
+          this.isDrawing = true;
+          const pos = getPos(e);
+          ctx.beginPath();
+          ctx.moveTo(pos.x, pos.y);
+        };
+
+        const moveDraw = (e) => {
+          if (!this.isDrawing) return;
+          e.preventDefault();
+          const pos = getPos(e);
+          ctx.strokeStyle = this.brushColor;
+          ctx.lineWidth = this.brushSize;
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+        };
+
+        const endDraw = () => {
+          if (!this.isDrawing) return;
+          this.isDrawing = false;
+          ctx.closePath();
+          if (this.historyStack.length > 15) this.historyStack.shift();
+          this.historyStack.push(canvas.toDataURL());
+        };
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', moveDraw);
+        window.addEventListener('mouseup', endDraw);
+
+        canvas.addEventListener('touchstart', startDraw, { passive: false });
+        canvas.addEventListener('touchmove', moveDraw, { passive: false });
+        canvas.addEventListener('touchend', endDraw);
+      },
+
+      setColor(col) {
+        Sound.play('click');
+        this.brushColor = col;
+      },
+
+      setSize(sz) {
+        Sound.play('click');
+        this.brushSize = sz;
+      },
+
+      undoCanvas() {
+        Sound.play('click');
+        const canvas = document.getElementById('gartic-canvas');
+        if (!canvas || this.historyStack.length <= 1) return;
+        this.historyStack.pop();
+        const prevUrl = this.historyStack[this.historyStack.length - 1];
+        const img = new Image();
+        img.onload = () => {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+        };
+        img.src = prevUrl;
+      },
+
+      clearCanvas() {
+        Sound.play('click');
+        const canvas = document.getElementById('gartic-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        this.historyStack.push(canvas.toDataURL());
+      },
+
+      finishDrawing() {
+        Sound.play('success');
+        const canvas = document.getElementById('gartic-canvas');
+        const dataUrl = canvas ? canvas.toDataURL('image/png') : '';
+        this.stepsLog.push({ author: this.getPlayer(1), type: 'draw', content: dataUrl });
+        this.step = 2;
+        this.renderStep();
+      },
+
+      submitGuess() {
+        const val = document.getElementById('gartic-guess-input')?.value.trim() || 'Непонятный шедевр';
+        this.stepsLog.push({ author: this.getPlayer(2), type: 'guess', content: val });
+        this.step = 3;
+        this.renderStep();
+      },
+
+      rotateAndRestart() {
+        // Rotate player order so everyone gets a turn
+        const first = App.players.shift();
+        App.players.push(first);
+        App.renderPlayers();
+        this.start();
+      }
+    };
+
+    /**************************************************************
+     * 2. BOMB ENGINE (Слова-мины / Бомба)
+     **************************************************************/
+    const BombEngine = {
+      timeLeft: 45,
+      scoreInTurn: 0,
+      speakerIdx: 0,
+      currentCard: null,
+
+      start() {
+        this.speakerIdx = 0;
+        this.renderPreRound();
+      },
+
+      renderPreRound() {
+        App.clearActiveTimer();
+        const speaker = App.players[this.speakerIdx % App.players.length];
+        const stage = document.getElementById('game-stage');
+        document.getElementById('active-game-round-pill').textContent = `Ход: ${speaker.name}`;
+
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto my-auto text-center space-y-6">
+            <div class="text-6xl animate-bounce">💣</div>
+            <div class="space-y-2">
+              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-400/30 text-rose-300 text-xs font-bold">
+                <span>Объясняет: ${speaker.avatar} ${speaker.name}</span>
+              </div>
+              <h3 class="font-display font-bold text-2xl text-white">Осторожно, Слова-мины!</h3>
+              <p class="text-xs sm:text-sm text-slate-300">
+                Объясните как можно больше слов компании за <strong>45 секунд</strong>. Но если вы назовёте любое из 5 запретных «слов-мин» на карточке — бомба сдетонирует!
+              </p>
+            </div>
+            <button onclick="BombEngine.beginCountdown()" class="neon-btn w-full py-4 rounded-2xl font-display font-bold text-base text-white">
+              Зажечь фитиль! 🔥 (45 сек)
+            </button>
+          </div>
+        `;
+      },
+
+      beginCountdown() {
+        Sound.play('click');
+        this.timeLeft = 45;
+        this.scoreInTurn = 0;
+        this.nextCard();
+
+        App.activeTimer = setInterval(() => {
+          this.timeLeft--;
+          const timerEl = document.getElementById('bomb-timer-val');
+          if (timerEl) timerEl.textContent = `${this.timeLeft}с`;
+          if (this.timeLeft <= 10 && this.timeLeft > 0) Sound.play('tick');
+
+          if (this.timeLeft <= 0) {
+            this.endTurn('Время вышло! Бомба взорвалась! 💥');
+          }
+        }, 1000);
+      },
+
+      nextCard() {
+        this.currentCard = DB.bombCards[Math.floor(Math.random() * DB.bombCards.length)];
+        this.renderActiveCard();
+      },
+
+      renderActiveCard() {
+        const speaker = App.players[this.speakerIdx % App.players.length];
+        const stage = document.getElementById('game-stage');
+
+        stage.innerHTML = `
+          <div class="max-w-md mx-auto w-full my-auto space-y-5">
+            <!-- Status header -->
+            <div class="flex items-center justify-between px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10">
+              <div class="flex items-center gap-2 text-xs font-bold text-white">
+                <span>${speaker.avatar} ${speaker.name}</span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">+${this.scoreInTurn} очк.</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-rose-400 font-display font-bold text-base">
+                <i class="fa-solid fa-bomb animate-pulse"></i>
+                <span id="bomb-timer-val">${this.timeLeft}с</span>
+              </div>
+            </div>
+
+            <!-- Main Word Card -->
+            <div class="rounded-3xl p-6 bg-gradient-to-b from-slate-800/90 to-slate-900/95 border-2 border-rose-500/40 shadow-2xl text-center space-y-4">
+              <div>
+                <span class="text-[11px] uppercase tracking-widest text-emerald-400 font-bold">Объясните слово:</span>
+                <h3 class="font-display font-black text-2xl sm:text-3xl text-white mt-1 tracking-wide">${this.currentCard.word}</h3>
+              </div>
+
+              <div class="border-t border-white/10 pt-4 space-y-2">
+                <div class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <span>Запретные слова-мины (НЕЛЬЗЯ ГОВОРИТЬ):</span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-2 pt-1">
+                  ${this.currentCard.mines.map(m => `
+                    <span class="px-3.5 py-1.5 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-200 font-bold text-sm">
+                      🚫 ${m}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="BombEngine.triggerMine()" class="py-3.5 rounded-2xl bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500/50 text-rose-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition">
+                <i class="fa-solid fa-explosion"></i>
+                <span>Назвал мину! (-1)</span>
+              </button>
+              <button onclick="BombEngine.wordGuessed()" class="neon-btn py-3.5 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-check"></i>
+                <span>Угадали! (+2 очка)</span>
+              </button>
+            </div>
+          </div>
+        `;
+      },
+
+      wordGuessed() {
+        Sound.play('success');
+        const speaker = App.players[this.speakerIdx % App.players.length];
+        this.scoreInTurn += 2;
+        App.addScore(speaker.id, 2);
+        this.nextCard();
+      },
+
+      triggerMine() {
+        Sound.play('boom');
+        const speaker = App.players[this.speakerIdx % App.players.length];
+        this.scoreInTurn = Math.max(0, this.scoreInTurn - 1);
+        this.nextCard();
+      },
+
+      endTurn(reason) {
+        App.clearActiveTimer();
+        Sound.play('boom');
+        const speaker = App.players[this.speakerIdx % App.players.length];
+        App.recordHistory('Слова-мины', '💣', `${speaker.avatar} ${speaker.name}`, `За раунд набрано +${this.scoreInTurn} очк.`);
+
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-md mx-auto my-auto text-center space-y-5">
+            <div class="text-6xl">💥</div>
+            <h3 class="font-display font-bold text-2xl text-white">${reason}</h3>
+            <p class="text-sm text-slate-300">Игрок <strong>${speaker.avatar} ${speaker.name}</strong> принёс в копилку <strong>+${this.scoreInTurn} очк.</strong>!</p>
+            <button onclick="BombEngine.speakerIdx++; BombEngine.renderPreRound();" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm text-white">
+              Передать бомбу следующему игроку →
+            </button>
+          </div>
+        `;
+      }
+    };
+
+    /**************************************************************
+     * 3. SPY ENGINE (Пришелец среди нас / Шпион)
+     **************************************************************/
+    const SpyEngine = {
+      locationObj: null,
+      spyPlayerIndex: 0,
+      revealIndex: 0,
+      isCardShown: false,
+
+      start() {
+        this.locationObj = DB.spyLocations[Math.floor(Math.random() * DB.spyLocations.length)];
+        this.spyPlayerIndex = Math.floor(Math.random() * App.players.length);
+        this.revealIndex = 0;
+        this.isCardShown = false;
+        this.renderRoleDistribution();
+      },
+
+      renderRoleDistribution() {
+        const stage = document.getElementById('game-stage');
+        if (this.revealIndex >= App.players.length) {
+          this.renderDiscussionPhase();
+          return;
+        }
+
+        const player = App.players[this.revealIndex];
+        const isSpy = this.revealIndex === this.spyPlayerIndex;
+        const role = this.locationObj.roles[this.revealIndex % this.locationObj.roles.length];
+        document.getElementById('active-game-round-pill').textContent = `Карточка ${this.revealIndex + 1} из ${App.players.length}`;
+
+        if (!this.isCardShown) {
+          stage.innerHTML = `
+            <div class="max-w-md mx-auto my-auto text-center space-y-6">
+              <div class="w-20 h-20 rounded-3xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-4xl">
+                ${player.avatar}
+              </div>
+              <div class="space-y-2">
+                <span class="text-xs uppercase tracking-widest text-purple-300 font-bold">Секретная передача</span>
+                <h3 class="font-display font-bold text-2xl text-white">Передайте экран игроку ${player.name}</h3>
+                <p class="text-xs text-slate-400">Остальные не должны подсматривать в экран!</p>
+              </div>
+              <button onclick="SpyEngine.showSecret()" class="neon-btn w-full py-4 rounded-2xl font-display font-bold text-sm text-white flex items-center justify-center gap-2">
+                <i class="fa-solid fa-eye"></i>
+                <span>Я ${player.name} — Показать мою роль</span>
+              </button>
+            </div>
+          `;
+        } else {
+          stage.innerHTML = `
+            <div class="max-w-md mx-auto my-auto text-center space-y-6">
+              <div class="p-6 rounded-3xl ${isSpy ? 'bg-rose-500/20 border-2 border-rose-500' : 'bg-emerald-500/20 border-2 border-emerald-500'} space-y-3">
+                <div class="text-5xl">${isSpy ? '👽' : '🕵️'}</div>
+                <h3 class="font-display font-black text-2xl text-white">
+                  ${isSpy ? 'ВЫ — ПРИШЕЛЕЦ (ШПИОН)!' : this.locationObj.place}
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-200">
+                  ${isSpy
+                    ? 'Вы НЕ знаете, в какой локации находится компания! Слушайте чужие вопросы, не выдайте себя и попытайтесь понять, где вы находитесь.'
+                    : `Ваша роль в локации: <strong>${role}</strong>. Задавайте наводящие вопросы другим, чтобы вычислить Пришельца!`}
+                </p>
+              </div>
+              <button onclick="SpyEngine.hideAndNext()" class="w-full py-4 rounded-2xl bg-white/15 hover:bg-white/25 font-display font-bold text-sm text-white transition">
+                Скрыть роль и передать дальше →
+              </button>
+            </div>
+          `;
+        }
+      },
+
+      showSecret() {
+        Sound.play('click');
+        this.isCardShown = true;
+        this.renderRoleDistribution();
+      },
+
+      hideAndNext() {
+        Sound.play('click');
+        this.isCardShown = false;
+        this.revealIndex++;
+        this.renderRoleDistribution();
+      },
+
+      renderDiscussionPhase() {
+        document.getElementById('active-game-round-pill').textContent = 'Допрос и Голосование';
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto my-auto text-center space-y-6">
+            <div class="text-5xl">🛸</div>
+            <div class="space-y-2">
+              <h3 class="font-display font-bold text-2xl text-white">Время допроса! Кто Пришелец?</h3>
+              <p class="text-xs sm:text-sm text-slate-300">
+                По очереди задавайте друг другу вопросы о локации (например: «В какой одежде туда приходят?»). Когда будете готовы — проголосуйте за подозреваемого!
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              ${App.players.map((p, idx) => `
+                <button onclick="SpyEngine.accusePlayer(${idx})" class="p-3.5 rounded-2xl bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-400 transition space-y-1 text-center">
+                  <div class="text-3xl">${p.avatar}</div>
+                  <div class="font-bold text-xs text-white truncate">${p.name}</div>
+                  <div class="text-[10px] text-rose-300 font-semibold">Обвинить</div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      },
+
+      accusePlayer(accusedIdx) {
+        const spy = App.players[this.spyPlayerIndex];
+        const accused = App.players[accusedIdx];
+        const caught = accusedIdx === this.spyPlayerIndex;
+
+        if (caught) {
+          Sound.play('fanfare');
+          Confetti.fire();
+          App.players.forEach((p, idx) => {
+            if (idx !== this.spyPlayerIndex) App.addScore(p.id, 2);
+          });
+        } else {
+          Sound.play('boom');
+          App.addScore(spy.id, 4);
+        }
+
+        App.recordHistory('Пришелец среди нас', '👽', caught ? 'Мирные жители' : `${spy.avatar} ${spy.name}`, `Локация: ${this.locationObj.place}. Пришельцем был ${spy.name}`);
+
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-md mx-auto my-auto text-center space-y-5">
+            <div class="text-6xl">${caught ? '🎉' : '👽'}</div>
+            <h3 class="font-display font-bold text-2xl text-white">
+              ${caught ? `Пришелец пойман! Это был ${spy.name}!` : `Промах! ${accused.name} был мирным!`}
+            </h3>
+            <p class="text-sm text-slate-300">
+              Настоящий Пришелец: <strong>${spy.avatar} ${spy.name}</strong><br>
+              Секретная локация: <strong>${this.locationObj.place}</strong>
+            </p>
+            <button onclick="SpyEngine.start()" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm text-white">
+              Новая партия (новая локация) →
+            </button>
+          </div>
+        `;
+      }
+    };
+
+    /**************************************************************
+     * 4. WAVE ENGINE (На одной волне / Спектр интуиции)
+     **************************************************************/
+    const WaveEngine = {
+      targetVal: 50,
+      guessVal: 50,
+      pair: null,
+      hostIdx: 0,
+      targetHidden: false,
+
+      start() {
+        this.hostIdx = (this.hostIdx + 1) % App.players.length;
+        this.pair = DB.wavePairs[Math.floor(Math.random() * DB.wavePairs.length)];
+        this.targetVal = 12 + Math.floor(Math.random() * 76);
+        this.guessVal = 50;
+        this.targetHidden = false;
+        this.renderStage();
+      },
+
+      renderStage(revealed = false) {
+        const host = App.players[this.hostIdx];
+        document.getElementById('active-game-round-pill').textContent = `Ведущий: ${host.name}`;
+        const stage = document.getElementById('game-stage');
+
+        let diff = Math.abs(this.targetVal - this.guessVal);
+        let pts = diff <= 5 ? 4 : (diff <= 12 ? 3 : (diff <= 20 ? 2 : 0));
+
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto w-full my-auto space-y-6 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold">
+              <span>Ведущий волны: ${host.avatar} ${host.name}</span>
+            </div>
+
+            <div class="space-y-1">
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-white">Настройтесь на одну волну! 🌊</h3>
+              <p class="text-xs text-slate-300">
+                1. Ведущий смотрит на скрытую мишень, нажимает <strong>«Скрыть мишень»</strong> и называет одну ассоциацию.<br>
+                2. Команда двигает ползунок туда, где, по их мнению, находится мишень!
+              </p>
+            </div>
+
+            <!-- Spectrum Visual -->
+            <div class="p-5 rounded-3xl bg-white/5 border border-white/10 space-y-4">
+              <div class="flex items-center justify-between text-xs sm:text-sm font-extrabold">
+                <span class="px-3 py-1.5 rounded-xl bg-blue-500/20 text-blue-300">← ${this.pair[0]}</span>
+                <span class="px-3 py-1.5 rounded-xl bg-pink-500/20 text-pink-300">${this.pair[1]} →</span>
+              </div>
+
+              <!-- Target Zone Bar -->
+              <div class="relative h-12 rounded-2xl spectrum-gradient overflow-hidden border border-white/20 shadow-inner">
+                ${(!this.targetHidden || revealed) ? `
+                  <div class="absolute top-0 bottom-0 bg-amber-300/90 border-x-4 border-emerald-400 flex items-center justify-center text-[10px] font-black text-black transition-all"
+                       style="left: ${Math.max(0, this.targetVal - 8)}%; width: 16%;">
+                    🎯 МИШЕНЬ
+                  </div>
+                ` : `
+                  <div class="absolute inset-0 bg-slate-900/85 backdrop-blur-sm flex items-center justify-center text-xs font-bold text-purple-200">
+                    🔒 Мишень скрыта — команда выбирает позицию ползунком ниже!
+                  </div>
+                `}
+              </div>
+
+              <!-- Team Slider -->
+              <div class="space-y-2 pt-2">
+                <label class="text-xs text-slate-300 font-semibold block">Ползунок команды: <span id="wave-slider-label" class="text-pink-400 font-bold">${this.guessVal}%</span></label>
+                <input id="wave-slider" type="range" min="0" max="100" value="${this.guessVal}" 
+                       oninput="WaveEngine.guessVal = Number(this.value); document.getElementById('wave-slider-label').textContent = this.value + '%';"
+                       class="w-full accent-pink-500 cursor-pointer h-3 rounded-lg">
+              </div>
+            </div>
+
+            ${!revealed ? `
+              <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="WaveEngine.toggleTarget()" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-xs sm:text-sm font-bold text-white transition">
+                  ${this.targetHidden ? '👁️ Показать мишень ведущему' : '🙈 Скрыть мишень от команды'}
+                </button>
+                <button onclick="WaveEngine.checkResult()" class="neon-btn px-6 py-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-white">
+                  Проверить попадание! 🎯
+                </button>
+              </div>
+            ` : `
+              <div class="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-400/30 space-y-2">
+                <div class="font-display font-bold text-lg text-white">
+                  ${pts === 4 ? '🔥 ИДЕАЛЬНО В ЯБЛОЧКО! (+4 очка)' : (pts > 0 ? `👏 Почти угадали! (+${pts} очка)` : '😅 Волны разошлись (0 очков)')}
+                </div>
+                <div class="text-xs text-slate-300">Мишень была на ${this.targetVal}%, ответ команды: ${this.guessVal}%</div>
+                <button onclick="WaveEngine.start()" class="neon-btn px-6 py-2.5 rounded-xl font-bold text-xs text-white mt-2">
+                  Следующий спектр →
+                </button>
+              </div>
+            `}
+          </div>
+        `;
+      },
+
+      toggleTarget() {
+        Sound.play('click');
+        this.targetHidden = !this.targetHidden;
+        this.renderStage(false);
+      },
+
+      checkResult() {
+        let diff = Math.abs(this.targetVal - this.guessVal);
+        let pts = diff <= 5 ? 4 : (diff <= 12 ? 3 : (diff <= 20 ? 2 : 0));
+        if (pts > 0) {
+          Sound.play('fanfare');
+          Confetti.fire();
+          const host = App.players[this.hostIdx];
+          App.addScore(host.id, pts);
+        } else {
+          Sound.play('click');
+        }
+        this.renderStage(true);
+      }
+    };
+
+    /**************************************************************
+     * 5. HA-HA BATTLE ENGINE (Ха-Ха Батл / Мемодел)
+     **************************************************************/
+    const HahaEngine = {
+      prompt: '',
+      answers: [],
+      currentPlayerIdx: 0,
+
+      start() {
+        this.prompt = DB.hahaPrompts[Math.floor(Math.random() * DB.hahaPrompts.length)];
+        this.answers = [];
+        this.currentPlayerIdx = 0;
+        this.renderInputPhase();
+      },
+
+      renderInputPhase() {
+        const stage = document.getElementById('game-stage');
+        if (this.currentPlayerIdx >= App.players.length) {
+          this.renderVotingPhase();
+          return;
+        }
+
+        const p = App.players[this.currentPlayerIdx];
+        document.getElementById('active-game-round-pill').textContent = `Шутка ${this.currentPlayerIdx + 1} из ${App.players.length}`;
+
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto w-full my-auto space-y-5 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-xs font-bold">
+              <span>Отвечает: ${p.avatar} ${p.name}</span>
+            </div>
+            <div class="p-5 rounded-3xl bg-white/5 border border-white/10">
+              <span class="text-[11px] uppercase tracking-wider text-amber-300 font-bold">Ситуация раунда:</span>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-white mt-1">«${this.prompt}»</h3>
+            </div>
+            <input id="haha-answer-input" type="text" maxlength="90" placeholder="Введите ваш самый смешной ответ..." class="w-full px-4 py-3.5 rounded-2xl bg-black/50 border border-white/20 text-white text-center font-semibold text-sm sm:text-base focus:outline-none focus:border-pink-500">
+            <button onclick="HahaEngine.submitAnswer()" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm text-white">
+              Отправить шутку анонимно →
+            </button>
+          </div>
+        `;
+      },
+
+      submitAnswer() {
+        Sound.play('click');
+        const val = document.getElementById('haha-answer-input')?.value.trim() || 'Молча улыбнуться и выйти из чата';
+        this.answers.push({
+          player: App.players[this.currentPlayerIdx],
+          text: val
+        });
+        this.currentPlayerIdx++;
+        this.renderInputPhase();
+      },
+
+      renderVotingPhase() {
+        document.getElementById('active-game-round-pill').textContent = 'Голосование за лучшую шутку!';
+        const stage = document.getElementById('game-stage');
+
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto w-full my-auto space-y-5 text-center">
+            <h3 class="font-display font-bold text-xl text-white">«${this.prompt}»</h3>
+            <p class="text-xs text-slate-300">Выберите самый разрывной ответ раунда!</p>
+            <div class="space-y-3">
+              ${this.answers.map((a, idx) => `
+                <button onclick="HahaEngine.vote(${idx})" class="w-full p-4 rounded-2xl bg-white/5 hover:bg-pink-500/20 border border-white/10 hover:border-pink-400 text-left flex items-center justify-between gap-3 transition group">
+                  <span class="font-semibold text-sm sm:text-base text-white">«${a.text}»</span>
+                  <span class="px-3 py-1 rounded-xl bg-pink-500/20 text-pink-300 text-xs font-bold shrink-0 group-hover:bg-pink-500 group-hover:text-white transition">😂 Голос!</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      },
+
+      vote(idx) {
+        Sound.play('fanfare');
+        Confetti.fire();
+        const winner = this.answers[idx];
+        App.addScore(winner.player.id, 3);
+        App.recordHistory('Ха-Ха Батл', '😂', `${winner.player.avatar} ${winner.player.name}`, `Панчлайн: «${winner.text}»`);
+
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-md mx-auto my-auto text-center space-y-5">
+            <div class="text-6xl">${winner.player.avatar}</div>
+            <h3 class="font-display font-bold text-2xl text-white">Побеждает шутка ${winner.player.name}! (+3 очка)</h3>
+            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-amber-300 font-bold">
+              «${winner.text}»
+            </div>
+            <button onclick="HahaEngine.start()" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm text-white">
+              Следующий раунд Ха-Ха Батла →
+            </button>
+          </div>
+        `;
+      }
+    };
+
+    /**************************************************************
+     * 6. ONE WORD ENGINE (Одно слово — Кооператив)
+     **************************************************************/
+    const OneWordEngine = {
+      guesserIdx: 0,
+      secretWord: '',
+      clueStep: 0,
+      clues: [],
+
+      start() {
+        this.secretWord = DB.oneWordTargets[Math.floor(Math.random() * DB.oneWordTargets.length)];
+        this.clues = [];
+        this.clueStep = 0;
+        this.renderClueEntry();
+      },
+
+      renderClueEntry() {
+        const guesser = App.players[this.guesserIdx % App.players.length];
+        const clueGivers = App.players.filter((_, idx) => idx !== (this.guesserIdx % App.players.length));
+
+        if (this.clueStep >= clueGivers.length) {
+          this.renderGuesserScreen(guesser);
+          return;
+        }
+
+        const currentGiver = clueGivers[this.clueStep];
+        document.getElementById('active-game-round-pill').textContent = `Угадывает: ${guesser.name}`;
+        const stage = document.getElementById('game-stage');
+
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto w-full my-auto space-y-5 text-center">
+            <div class="p-3 rounded-2xl bg-amber-500/15 border border-amber-400/30 text-xs text-amber-200">
+              ⚠️ Игрок <strong>${guesser.avatar} ${guesser.name}</strong> НЕ должен смотреть на экран!
+            </div>
+            <div class="space-y-1">
+              <span class="text-xs text-slate-400">Подсказку пишет: <strong class="text-white">${currentGiver.avatar} ${currentGiver.name}</strong></span>
+              <h3 class="font-display font-black text-2xl sm:text-3xl text-emerald-400">Секретное слово: ${this.secretWord}</h3>
+              <p class="text-xs text-slate-300">Напишите <strong>ОДНО слово-ассоциацию</strong>. Помните: если кто-то ещё напишет такое же слово, оба сгорят!</p>
+            </div>
+            <input id="oneword-input" type="text" maxlength="25" placeholder="Одно слово..." class="w-full px-4 py-3.5 rounded-2xl bg-black/50 border border-white/20 text-white text-center font-bold text-base focus:outline-none focus:border-purple-500">
+            <button onclick="OneWordEngine.submitClue()" class="neon-btn w-full py-3.5 rounded-2xl font-display font-bold text-sm text-white">
+              Сохранить подсказку →
+            </button>
+          </div>
+        `;
+      },
+
+      submitClue() {
+        Sound.play('click');
+        const raw = (document.getElementById('oneword-input')?.value || '').trim().split(/\s+/)[0] || 'Тайна';
+        const giver = App.players.filter((_, idx) => idx !== (this.guesserIdx % App.players.length))[this.clueStep];
+        this.clues.push({ author: giver, word: raw.toUpperCase() });
+        this.clueStep++;
+        this.renderClueEntry();
+      },
+
+      renderGuesserScreen(guesser) {
+        // Filter duplicates
+        const counts = {};
+        this.clues.forEach(c => counts[c.word] = (counts[c.word] || 0) + 1);
+
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto w-full my-auto space-y-6 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 text-xs font-bold">
+              <span>Пригласите к экрану: ${guesser.avatar} ${guesser.name}</span>
+            </div>
+            <h3 class="font-display font-bold text-2xl text-white">Угадайте секретное слово по подсказкам!</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              ${this.clues.map(c => {
+                const isDup = counts[c.word] > 1;
+                return `
+                  <div class="px-4 py-3 rounded-2xl border ${isDup ? 'bg-rose-500/15 border-rose-500/40 text-rose-300 line-through' : 'bg-emerald-500/15 border-emerald-400/40 text-white'}">
+                    <div class="text-[10px] opacity-75">${c.author.avatar} ${c.author.name}</div>
+                    <div class="font-display font-bold text-base">${isDup ? 'СГОРЕЛО (Повтор!)' : c.word}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <button onclick="OneWordEngine.finish(false)" class="py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-xs sm:text-sm font-bold text-slate-300">
+                Не угадал (${this.secretWord})
+              </button>
+              <button onclick="OneWordEngine.finish(true)" class="neon-btn py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white">
+                🎉 Угадал слово «${this.secretWord}»! (+2 всем)
+              </button>
+            </div>
+          </div>
+        `;
+      },
+
+      finish(won) {
+        if (won) {
+          Sound.play('fanfare');
+          Confetti.fire();
+          App.players.forEach(p => App.addScore(p.id, 2));
+        } else {
+          Sound.play('click');
+        }
+        this.guesserIdx++;
+        this.start();
+      }
+    };
+
+    /**************************************************************
+     * 7. LIES ENGINE (Лживые факты — Правда или Блеф)
+     **************************************************************/
+    const LiesEngine = {
+      idx: 0,
+      start() {
+        this.idx = Math.floor(Math.random() * DB.liesQuestions.length);
+        this.renderQuestion(false);
+      },
+
+      renderQuestion(revealed, userChoice = null) {
+        const q = DB.liesQuestions[this.idx % DB.liesQuestions.length];
+        const stage = document.getElementById('game-stage');
+
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto w-full my-auto space-y-6 text-center">
+            <div class="text-5xl">🤥</div>
+            <div class="p-6 rounded-3xl bg-white/5 border border-white/15 space-y-2">
+              <span class="text-xs font-bold uppercase tracking-widest text-cyan-400">Правда или Выдумка?</span>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-white leading-relaxed">«${q.fact}»</h3>
+            </div>
+
+            ${!revealed ? `
+              <div class="grid grid-cols-2 gap-4">
+                <button onclick="LiesEngine.answer(true)" class="py-4 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-300 font-display font-bold text-base transition">
+                  ✅ Это ПРАВДА
+                </button>
+                <button onclick="LiesEngine.answer(false)" class="py-4 rounded-2xl bg-rose-500/20 hover:bg-rose-500/35 border border-rose-400/40 text-rose-300 font-display font-bold text-base transition">
+                  ❌ Это ЛОЖЬ
+                </button>
+              </div>
+            ` : `
+              <div class="p-5 rounded-3xl ${userChoice === q.isTrue ? 'bg-emerald-500/20 border border-emerald-400' : 'bg-rose-500/20 border border-rose-400'} space-y-2">
+                <div class="font-display font-bold text-lg text-white">
+                  ${userChoice === q.isTrue ? '🎉 Точно в цель!' : '😮 А вот и нет!'}
+                </div>
+                <p class="text-xs sm:text-sm text-slate-200">${q.explanation}</p>
+                <div class="pt-3 flex flex-wrap justify-center gap-2">
+                  ${App.players.map(p => `
+                    <button onclick="App.addScore(${p.id}, 2); App.toast('+2 очка игроку ${p.name}', '🌟')" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-white font-semibold">
+                      +2 ${p.avatar} ${p.name}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+              <button onclick="LiesEngine.idx++; LiesEngine.renderQuestion(false);" class="neon-btn px-6 py-3.5 rounded-2xl font-display font-bold text-sm text-white">
+                Следующий факт →
+              </button>
+            `}
+          </div>
+        `;
+      },
+
+      answer(choice) {
+        const q = DB.liesQuestions[this.idx % DB.liesQuestions.length];
+        if (choice === q.isTrue) {
+          Sound.play('success');
+          Confetti.fire();
+        } else {
+          Sound.play('boom');
+        }
+        this.renderQuestion(true, choice);
+      }
+    };
+
+    /**************************************************************
+     * 8. CROCODILE & LIP READING ENGINE (Крокодил & Читай по губам)
+     **************************************************************/
+    const CrocodileEngine = {
+      actorIdx: 0,
+      currentWord: 'Кенгуру',
+      pts: 2,
+
+      start() {
+        this.pickWord('medium', 2);
+      },
+
+      pickWord(level, pts) {
+        Sound.play('click');
+        const list = DB.crocodileWords[level];
+        this.currentWord = list[Math.floor(Math.random() * list.length)];
+        this.pts = pts;
+        this.render();
+      },
+
+      render() {
+        const actor = App.players[this.actorIdx % App.players.length];
+        const stage = document.getElementById('game-stage');
+
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto w-full my-auto space-y-6 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+              <span>Показывает жестами: ${actor.avatar} ${actor.name}</span>
+            </div>
+
+            <div class="flex justify-center gap-2">
+              <button onclick="CrocodileEngine.pickWord('easy', 1)" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-emerald-300 font-bold">Легко (+1)</button>
+              <button onclick="CrocodileEngine.pickWord('medium', 2)" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-amber-300 font-bold">Средне (+2)</button>
+              <button onclick="CrocodileEngine.pickWord('hard', 3)" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-rose-300 font-bold">Сложно (+3)</button>
+            </div>
+
+            <div class="p-8 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 border-2 border-emerald-500/40 space-y-2 shadow-2xl">
+              <span class="text-xs uppercase tracking-widest text-emerald-300 font-bold">Ваше задание (${this.pts} очк.):</span>
+              <h3 class="font-display font-black text-2xl sm:text-3xl text-white">${this.currentWord}</h3>
+              <p class="text-xs text-slate-400 pt-1">Объясняйте только жестами и мимикой (или одними губами без звука)!</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="CrocodileEngine.actorIdx++; CrocodileEngine.pickWord('medium', 2)" class="py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-xs sm:text-sm font-bold text-slate-300">
+                Пропустить / Сменить игрока
+              </button>
+              <button onclick="CrocodileEngine.guessed()" class="neon-btn py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white">
+                🎉 Угадали! (+${this.pts} очка)
+              </button>
+            </div>
+          </div>
+        `;
+      },
+
+      guessed() {
+        Sound.play('fanfare');
+        Confetti.fire();
+        const actor = App.players[this.actorIdx % App.players.length];
+        App.addScore(actor.id, this.pts);
+        this.actorIdx++;
+        this.pickWord('medium', 2);
+      }
+    };
+
+    /**************************************************************
+     * 9. TIMELINE ENGINE (Когда это было?)
+     **************************************************************/
+    const TimelineEngine = {
+      idx: 0,
+      start() {
+        this.idx = Math.floor(Math.random() * DB.timelineEvents.length);
+        this.render(false);
+      },
+      render(revealed) {
+        const ev = DB.timelineEvents[this.idx % DB.timelineEvents.length];
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto w-full my-auto space-y-6 text-center">
+            <div class="text-5xl">⏳</div>
+            <div class="p-6 rounded-3xl bg-white/5 border border-white/15 space-y-2">
+              <span class="text-xs uppercase tracking-widest text-amber-300 font-bold">В каком году это произошло?</span>
+              <h3 class="font-display font-bold text-xl text-white">«${ev.title}»</h3>
+            </div>
+            ${!revealed ? `
+              <p class="text-xs text-slate-300">Пусть каждый участник назовёт свой вариант года! Кто окажется ближе всех?</p>
+              <button onclick="TimelineEngine.render(true); Sound.play('fanfare');" class="neon-btn w-full py-4 rounded-2xl font-display font-bold text-sm text-white">
+                Показать точный год! 📅
+              </button>
+            ` : `
+              <div class="p-5 rounded-3xl bg-amber-500/20 border border-amber-400 space-y-3">
+                <div class="font-display font-black text-4xl text-amber-300">${ev.year} год</div>
+                <p class="text-xs text-slate-200">Наградите игрока, чей ответ был ближе всего:</p>
+                <div class="flex flex-wrap justify-center gap-2">
+                  ${App.players.map(p => `
+                    <button onclick="App.addScore(${p.id}, 3); App.toast('+3 очка игроку ${p.name}', '⏳'); TimelineEngine.idx++; TimelineEngine.render(false);" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-bold text-white">
+                      🏆 ${p.avatar} ${p.name} (+3)
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+            `}
+          </div>
+        `;
+      }
+    };
+
+    /**************************************************************
+     * 10. SEARCH ENGINE (Что ищут в Поиске?)
+     **************************************************************/
+    const SearchEngine = {
+      idx: 0,
+      revealedIds: [],
+      start() {
+        this.idx = 0;
+        this.revealedIds = [];
+        this.render();
+      },
+      render() {
+        const item = DB.searchQueries[this.idx % DB.searchQueries.length];
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto w-full my-auto space-y-5 text-center">
+            <div class="p-4 rounded-2xl bg-white text-slate-900 font-bold text-base sm:text-lg flex items-center justify-between shadow-lg">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-rose-500"></i>
+                <span>${item.prefix}</span>
+              </div>
+              <span class="text-xs bg-amber-400 px-2.5 py-1 rounded-lg font-extrabold">Найти</span>
+            </div>
+            <p class="text-xs text-slate-300">Угадайте самые популярные продолжения этого запроса! Нажимайте на полоски, чтобы открыть:</p>
+            <div class="space-y-2.5">
+              ${item.options.map((opt, i) => {
+                const isOpen = this.revealedIds.includes(i);
+                return `
+                  <button onclick="SearchEngine.reveal(${i})" class="w-full p-4 rounded-2xl border ${isOpen ? 'bg-emerald-500/20 border-emerald-400 text-white' : 'bg-white/5 hover:bg-white/10 border-white/15 text-slate-300'} flex items-center justify-between font-bold text-sm transition">
+                    <span>${isOpen ? opt.text : `🔒 Скрытый топ-запрос #${i + 1}`}</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-black/30 text-amber-300 text-xs">${opt.pts} очк.</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+            <button onclick="SearchEngine.idx++; SearchEngine.revealedIds=[]; SearchEngine.render();" class="neon-btn px-6 py-3 rounded-2xl font-display font-bold text-xs sm:text-sm text-white">
+              Следующий поисковый запрос →
+            </button>
+          </div>
+        `;
+      },
+      reveal(i) {
+        if (!this.revealedIds.includes(i)) {
+          Sound.play('success');
+          this.revealedIds.push(i);
+          this.render();
+        }
+      }
+    };
+
+    /**************************************************************
+     * 11. FOREHEAD ENGINE (Кто я? Стикер на лбу)
+     **************************************************************/
+    const ForeheadEngine = {
+      pIdx: 0,
+      char: '',
+      start() {
+        this.nextChar();
+      },
+      nextChar() {
+        this.char = DB.foreheadCharacters[Math.floor(Math.random() * DB.foreheadCharacters.length)];
+        this.render();
+      },
+      render() {
+        const p = App.players[this.pIdx % App.players.length];
+        const stage = document.getElementById('game-stage');
+        stage.innerHTML = `
+          <div class="max-w-lg mx-auto w-full my-auto space-y-6 text-center">
+            <div class="p-3 rounded-2xl bg-pink-500/15 border border-pink-400/30 text-xs text-pink-200">
+              🙈 Игрок <strong>${p.avatar} ${p.name}</strong> отворачивается или прикладывает телефон ко лбу!
+            </div>
+            <div class="p-8 rounded-3xl bg-gradient-to-br from-purple-900/60 to-pink-900/40 border-2 border-pink-400/50 space-y-2">
+              <span class="text-xs uppercase tracking-widest text-pink-300 font-bold">Персонаж на лбу у ${p.name}:</span>
+              <h3 class="font-display font-black text-3xl sm:text-4xl text-white">${this.char}</h3>
+            </div>
+            <p class="text-xs text-slate-300">${p.name} задаёт вопросы («Я человек?», «Я из мультфильма?»), а компания отвечает только «Да» или «Нет»!</p>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="ForeheadEngine.pIdx++; ForeheadEngine.nextChar();" class="py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-xs sm:text-sm font-bold text-slate-300">
+                Сменить карточку
+              </button>
+              <button onclick="App.addScore(${p.id}, 3); Confetti.fire(); Sound.play('fanfare'); ForeheadEngine.pIdx++; ForeheadEngine.nextChar();" class="neon-btn py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white">
+                🎉 Угадал себя! (+3 очка)
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    };
+
+    /**************************************************************
+     * 12. DEBATE ENGINE (Безумные Дебаты)
+     **************************************************************/
+    const DebateEngine = {
+      idx: 0,
+      start() {
+        this.idx = Math.floor(Math.random() * DB.debateTopics.length);
+        this.render();
+      },
+      render() {
+        const topic = DB.debateTopics[this.idx % DB.debateTopics.length];
+        const p1 = App.players[0];
+        const p2 = App.players[1 % App.players.length];
+        const stage = document.getElementById('game-stage');
+
+        stage.innerHTML = `
+          <div class="max-w-xl mx-auto w-full my-auto space-y-6 text-center">
+            <div class="text-4xl">🎙️</div>
+            <h3 class="font-display font-bold text-xl sm:text-2xl text-white">${topic.q}</h3>
+            <p class="text-xs text-slate-300">У каждого спикера есть 30 секунд на пламенную речь в защиту своей позиции! Остальные голосуют, кто был убедительнее:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="p-5 rounded-3xl bg-blue-500/15 border border-blue-400/40 space-y-3">
+                <div class="text-3xl">${p1.avatar}</div>
+                <div class="text-xs text-blue-300 font-bold">Позиция игрока ${p1.name}:</div>
+                <div class="font-display font-bold text-base text-white">«${topic.a}»</div>
+                <button onclick="App.addScore(${p1.id}, 3); Confetti.fire(); Sound.play('fanfare'); DebateEngine.next();" class="w-full py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-bold text-xs">
+                  Голосовать за ${p1.name} (+3)
+                </button>
+              </div>
+              <div class="p-5 rounded-3xl bg-pink-500/15 border border-pink-400/40 space-y-3">
+                <div class="text-3xl">${p2.avatar}</div>
+                <div class="text-xs text-pink-300 font-bold">Позиция игрока ${p2.name}:</div>
+                <div class="font-display font-bold text-base text-white">«${topic.b}»</div>
+                <button onclick="App.addScore(${p2.id}, 3); Confetti.fire(); Sound.play('fanfare'); DebateEngine.next();" class="w-full py-2.5 rounded-xl bg-pink-500 hover:bg-pink-400 text-white font-bold text-xs">
+                  Голосовать за ${p2.name} (+3)
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      next() {
+        const first = App.players.shift();
+        App.players.push(first);
+        App.renderPlayers();
+        this.idx++;
+        this.render();
+      }
+    };
+
+    // Start Application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      App.init();
+    });
+  </script>
+</body>
+</html>
